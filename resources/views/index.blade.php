@@ -38,7 +38,7 @@ Tobest Health care
 
       <a href="/" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-         <img src="{{ asset('logo.png') }}" alt="site logo">
+         <img src="{{ asset('logo.png') }}" style="width: 100px; height: auto;" alt="site logo">
         {{-- <svg class="my-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g id="bgCarrier" stroke-width="0"></g>
           <g id="tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
