@@ -38,7 +38,7 @@ Tobest Health care
 
       <a href="/" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-         <img src="{{ asset('logo.png') }}" style="width: 100px; height: auto;"m alt="site logo">
+         <img src="{{ asset('logo.png') }}" alt="site logo">
         {{-- <svg class="my-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g id="bgCarrier" stroke-width="0"></g>
           <g id="tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -57,12 +57,12 @@ Tobest Health care
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html" class="active">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="properties.html">Jobs</a></li>
-          <li><a href="services.html">Services</a></li>
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/jobs">Jobs</a></li>
+          <li><a href="/services">Services</a></li>
         
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="/contact">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -100,75 +100,74 @@ Tobest Health care
     <p>Whether you are a care provider or a healthcare professional, we are here to help</p>
   </div>
 
-  <form action="" class="property-search-form">
+  <form method="GET" action="{{ route('user.jobs.index') }}" class="property-search-form">
 
-    <!-- Audience Selector -->
-    <div class="search-grid">
-      <div class="search-field">
-        <label for="search-purpose" class="field-label">I am looking to</label>
-        <select id="search-purpose" name="purpose" required>
-          <option value="">Select an option</option>
-          <option value="hire">Hire Healthcare Staff</option>
-          <option value="job">Find a Care Job</option>
-        </select>
-        <i class="bi bi-people field-icon"></i>
-      </div>
+  <div class="search-grid">
 
-      <div class="search-field">
-        <label for="search-location" class="field-label">Location</label>
-        <input
-          type="text"
-          id="search-location"
-          name="location"
-          placeholder="Enter city or care setting"
-          required
-        >
-        <i class="bi bi-geo-alt field-icon"></i>
-      </div>
-
-      <div class="search-field">
-        <label for="search-role" class="field-label">Role / Staff Type</label>
-        <select id="search-role" name="role" required>
-          <option value="">All Roles</option>
-          <option value="care-assistant">Care Assistant</option>
-          <option value="support-worker">Support Worker</option>
-          <option value="nurse">Registered Nurse</option>
-          <option value="doctor">Doctor</option>
-        </select>
-        <i class="bi bi-briefcase field-icon"></i>
-      </div>
-
-      <div class="search-field">
-        <label for="search-service" class="field-label">Service / Employment Type</label>
-        <select id="search-service" name="service_type">
-          <option value="">Any</option>
-          <option value="temporary">Temporary</option>
-          <option value="permanent">Permanent</option>
-          <option value="night">Night Shifts</option>
-          <option value="day">Day Shifts</option>
-          <option value="emergency">Emergency Cover</option>
-        </select>
-        <i class="bi bi-clock field-icon"></i>
-      </div>
-
-      <div class="search-field">
-        <label for="search-setting" class="field-label">Care Setting</label>
-        <select id="search-setting" name="care_setting">
-          <option value="">Any</option>
-          <option value="care-home">Care Home</option>
-          <option value="hospital">Hospital</option>
-          <option value="residential">Residential Home</option>
-          <option value="home-care">Client’s Own Home</option>
-        </select>
-        <i class="bi bi-house-heart field-icon"></i>
-      </div>
+    {{-- Purpose --}}
+    <div class="search-field">
+      <label class="field-label">I am looking to</label>
+      <select name="purpose" required>
+        <option value="">Select</option>
+        <option value="job">Find a Care Job</option>
+        <option value="hire">Hire Healthcare Staff</option>
+      </select>
     </div>
 
-    <button type="submit" class="search-btn">
-      <i class="bi bi-search"></i>
-      <span>Search Opportunities</span>
-    </button>
-  </form>
+    {{-- Location --}}
+    <div class="search-field">
+      <label class="field-label">Location</label>
+      <select name="location">
+        <option value="">Any</option>
+        @foreach($locations as $location)
+          <option value="{{ $location }}">{{ $location }}</option>
+        @endforeach
+      </select>
+    </div>
+
+    {{-- Role --}}
+    <div class="search-field">
+      <label class="field-label">Role</label>
+      <select name="role_id">
+        <option value="">Any</option>
+        @foreach($roles as $role)
+          <option value="{{ $role->id }}">{{ $role->name }}</option>
+        @endforeach
+      </select>
+    </div>
+
+    {{-- Service Type --}}
+    <div class="search-field">
+      <label class="field-label">Service Type</label>
+      <select name="service_type_id">
+        <option value="">Any</option>
+        @foreach($serviceTypes as $type)
+          <option value="{{ $type->id }}">{{ $type->name }}</option>
+        @endforeach
+      </select>
+    </div>
+
+    {{-- Care Setting --}}
+    <div class="search-field">
+      <label class="field-label">Care Setting</label>
+      <select name="care_setting_id">
+        <option value="">Any</option>
+        @foreach($careSettings as $setting)
+          <option value="{{ $setting->id }}">{{ $setting->name }}</option>
+        @endforeach
+      </select>
+    </div>
+
+  </div>
+
+  <button type="submit" class="search-btn">
+    <i class="bi bi-search"></i>
+    Search Opportunities
+  </button>
+
+</form>
+
+
 </div>
 
 
@@ -261,7 +260,7 @@ Tobest Health care
       <div class="col-lg-5" data-aos="zoom-in" data-aos-delay="200">
         <div class="image-gallery">
           <div class="primary-image">
-            <img src="assets/img/real-estate/property-exterior-1.webp" alt="Healthcare Professionals" class="img-fluid">
+            <img src="{{ asset('fe/assets/img/healthcare/workers.jpeg') }}" alt="Healthcare Professionals" class="img-fluid">
             <div class="experience-badge">
               <div class="badge-content">
                 <div class="number">
@@ -272,7 +271,7 @@ Tobest Health care
             </div>
           </div>
           <div class="secondary-image">
-            <img src="assets/img/real-estate/property-interior-4.webp" alt="Quality Care" class="img-fluid">
+            <img src="{{asset('fe/assets/img/healthcare/quality-care.jpg')}}" alt="Quality Care" class="img-fluid">
           </div>
         </div>
       </div>
@@ -341,127 +340,7 @@ Tobest Health care
 
 </section><!-- /Home About Section -->
 
-   <!-- Featured Staffing Section -->
-<section id="featured-properties" class="featured-properties section">
 
-  <!-- Section Title -->
-  <div class="container section-title" data-aos="fade-up">
-    <h2>Featured Care Solutions</h2>
-    <p>Reliable, compassionate healthcare professionals matched to the right care environments</p>
-  </div><!-- End Section Title -->
-
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-    <div class="row gy-5">
-
-      <div class="col-lg-8">
-
-        <div class="featured-property-main" data-aos="zoom-in" data-aos-delay="200">
-          <div class="property-hero">
-            <img src="assets/img/healthcare/care-team.webp" alt="Healthcare Staffing" class="img-fluid">
-            <div class="property-overlay">
-              <div class="property-badge-main premium">Nurse-Led</div>
-              <div class="property-stats">
-                <div class="stat-item">
-                  <i class="bi bi-heart-pulse"></i>
-                  <span>Qualified Staff</span>
-                </div>
-                <div class="stat-item">
-                  <i class="bi bi-clock-fill"></i>
-                  <span>24/7 Coverage</span>
-                </div>
-                <div class="stat-item">
-                  <i class="bi bi-shield-check"></i>
-                  <span>Fully Vetted</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="property-hero-content">
-            <div class="property-header">
-              <div class="property-info">
-                <h2><a href="#">Comprehensive Healthcare Staffing</a></h2>
-                <div class="property-address">
-                  <i class="bi bi-geo-alt-fill"></i>
-                  <span>Care Homes, Hospitals & Home Care</span>
-                </div>
-              </div>
-              <div class="property-price-main">UK-Wide</div>
-            </div>
-            <p class="property-description">
-              Nurse-led recruitment delivering dependable care assistants, nurses, and doctors to support
-              safe, dignified, and high-quality care across all settings.
-            </p>
-            <div class="property-actions-main">
-              <a href="contact.html" class="btn-primary-custom">Request Staff</a>
-              <a href="services.html" class="btn-outline-custom">Our Services</a>
-              <div class="property-listing-info">
-                <span class="listing-status for-sale">Available Now</span>
-                <span class="listing-date">Fast Placement</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="col-lg-4">
-
-        <div class="properties-sidebar">
-
-          <div class="sidebar-property-card" data-aos="fade-left" data-aos-delay="300">
-            <div class="sidebar-property-image">
-              <img src="assets/img/healthcare/support-workers.webp" alt="Support Workers" class="img-fluid">
-              <div class="sidebar-property-badge hot">In Demand</div>
-            </div>
-            <div class="sidebar-property-content">
-              <h4><a href="#">Care Assistants & Support Workers</a></h4>
-              <div class="sidebar-location">
-                <i class="bi bi-hospital"></i>
-                <span>Residential & Home Care</span>
-              </div>
-              <div class="sidebar-specs">
-                <span><i class="bi bi-check2-circle"></i> Trained</span>
-                <span><i class="bi bi-check2-circle"></i> Compassionate</span>
-                <span><i class="bi bi-check2-circle"></i> Reliable</span>
-              </div>
-              <div class="sidebar-price-row">
-                <div class="sidebar-price">Flexible Cover</div>
-                <a href="contact.html" class="sidebar-btn">Enquire</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="sidebar-property-card" data-aos="fade-left" data-aos-delay="400">
-            <div class="sidebar-property-image">
-              <img src="assets/img/healthcare/nurses.webp" alt="Registered Nurses" class="img-fluid">
-              <div class="sidebar-property-badge new">Trusted</div>
-            </div>
-            <div class="sidebar-property-content">
-              <h4><a href="#">Registered Nurses & Doctors</a></h4>
-              <div class="sidebar-location">
-                <i class="bi bi-clipboard2-pulse"></i>
-                <span>Hospitals & Clinical Settings</span>
-              </div>
-              <div class="sidebar-specs">
-                <span><i class="bi bi-award"></i> Experienced</span>
-                <span><i class="bi bi-shield"></i> Compliant</span>
-                <span><i class="bi bi-people"></i> Patient-Focused</span>
-              </div>
-              <div class="sidebar-price-row">
-                <div class="sidebar-price">On-Demand</div>
-                <a href="contact.html" class="sidebar-btn">Enquire</a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-</section>
 
 <!-- Featured Services Section -->
 <section id="featured-services" class="featured-services section">
@@ -488,13 +367,13 @@ Tobest Health care
               <li><i class="bi bi-check-circle-fill"></i> Flexible Cover</li>
               <li><i class="bi bi-check-circle-fill"></i> Person-Centred Care</li>
             </ul>
-            <a href="services.html" class="service-link">
+            <a href="/services" class="service-link">
               <span>Learn More</span>
               <i class="bi bi-arrow-up-right"></i>
             </a>
           </div>
           <div class="service-visual">
-            <img src="assets/img/healthcare/care-home.webp" class="img-fluid" alt="Care Staffing" loading="lazy">
+            <img src="{{ asset('fe/assets/img/healthcare/care-staffing.jpg') }}" class="img-fluid" alt="Care Staffing" loading="lazy">
           </div>
         </div>
       </div>
@@ -518,7 +397,7 @@ Tobest Health care
             </a>
           </div>
           <div class="service-visual">
-            <img src="assets/img/healthcare/hospital-team.webp" class="img-fluid" alt="Nursing Services" loading="lazy">
+            <img src="{{ asset('fe/assets/img/healthcare/hospital-team.jpg') }}" class="img-fluid" alt="Nursing Services" loading="lazy">
           </div>
         </div>
       </div>
@@ -526,7 +405,7 @@ Tobest Health care
     </div>
 
     <div class="text-center" data-aos="zoom-in" data-aos-delay="600">
-      <a href="services.html" class="btn-view-all">
+      <a href="/services" class="btn-view-all">
         <span>View All Services</span>
         <i class="bi bi-arrow-right"></i>
       </a>
@@ -554,7 +433,7 @@ Tobest Health care
 
         <div class="featured-property-main" data-aos="zoom-in" data-aos-delay="200">
           <div class="property-hero">
-            <img src="assets/img/healthcare/care-team.webp" alt="Healthcare Staffing" class="img-fluid">
+            <img src="{{ asset('fe/assets/img/healthcare/agent-1.webp') }}" alt="Healthcare Staffing" class="img-fluid">
             <div class="property-overlay">
               <div class="property-badge-main premium">Nurse-Led</div>
               <div class="property-stats">
@@ -607,7 +486,7 @@ Tobest Health care
 
           <div class="sidebar-property-card" data-aos="fade-left" data-aos-delay="300">
             <div class="sidebar-property-image">
-              <img src="assets/img/healthcare/support-workers.webp" alt="Support Workers" class="img-fluid">
+              <img src="{{ asset('fe/assets/img/healthcare/support-staff.jpg') }}" alt="Support Workers" class="img-fluid">
               <div class="sidebar-property-badge hot">In Demand</div>
             </div>
             <div class="sidebar-property-content">
@@ -630,7 +509,7 @@ Tobest Health care
 
           <div class="sidebar-property-card" data-aos="fade-left" data-aos-delay="400">
             <div class="sidebar-property-image">
-              <img src="assets/img/healthcare/nurses.webp" alt="Registered Nurses" class="img-fluid">
+              <img src="{{ asset('fe/assets/img/healthcare/nurses.webp') }}" alt="Registered Nurses" class="img-fluid">
               <div class="sidebar-property-badge new">Trusted</div>
             </div>
             <div class="sidebar-property-content">
@@ -676,7 +555,7 @@ Tobest Health care
         <div class="featured-agent">
           <div class="agent-wrapper">
             <div class="agent-photo">
-              <img src="assets/img/healthcare/worker-1.webp" alt="Healthcare Worker" class="img-fluid">
+              <img src="{{ asset('fe/assets/img/healthcare/agent-2.webp') }}" alt="Healthcare Worker" class="img-fluid">
               <span class="achievement-badge">Senior</span>
             </div>
             <div class="agent-details">
@@ -700,7 +579,7 @@ Tobest Health care
         <div class="featured-agent">
           <div class="agent-wrapper">
             <div class="agent-photo">
-              <img src="assets/img/healthcare/worker-2.webp" alt="Healthcare Worker" class="img-fluid">
+              <img src="{{ asset('fe/assets/img/healthcare/agent-3.webp') }}" alt="Healthcare Worker" class="img-fluid">
               <span class="achievement-badge expert">Expert</span>
             </div>
             <div class="agent-details">
@@ -724,7 +603,7 @@ Tobest Health care
         <div class="featured-agent">
           <div class="agent-wrapper">
             <div class="agent-photo">
-              <img src="assets/img/healthcare/worker-3.webp" alt="Healthcare Worker" class="img-fluid">
+              <img src="{{ asset('fe/assets/img/healthcare/agent-4.webp') }}" alt="Healthcare Worker" class="img-fluid">
               <span class="achievement-badge rising">Trusted</span>
             </div>
             <div class="agent-details">
@@ -748,7 +627,7 @@ Tobest Health care
         <div class="featured-agent">
           <div class="agent-wrapper">
             <div class="agent-photo">
-              <img src="assets/img/healthcare/worker-4.webp" alt="Healthcare Worker" class="img-fluid">
+              <img src="{{ asset('fe/assets/img/healthcare/agent-5.webp') }}" alt="Healthcare Worker" class="img-fluid">
               <span class="achievement-badge veteran">Veteran</span>
             </div>
             <div class="agent-details">
@@ -774,104 +653,132 @@ Tobest Health care
 
 </section><!-- /Featured Healthcare Workers Section -->
 
-<!-- Featured Job Postings Section -->
-<section id="testimonials" class="testimonials section light-background">
+
+<section id="job-postings" class="job-postings section light-background">
 
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
     <h2>Featured Job Postings</h2>
     <p>Current healthcare opportunities available through Tobest Healthcare Solutions</p>
-  </div><!-- End Section Title -->
+  </div>
 
   <div class="container">
+    <div class="row gy-4">
 
-    <div class="testimonial-grid">
+      <!-- Job Card -->
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="job-card">
+          <div class="job-header">
+            <span class="job-badge onsite">On-site</span>
+            <span class="job-salary">£28 – £38 / hour</span>
+          </div>
 
-      <div class="testimonial-item" data-aos="zoom-in" data-aos-delay="100">
-        <div class="testimonial-card">
-          <div class="testimonial-header">
-            <div class="testimonial-image">
-              <img src="assets/img/healthcare/job-nurse.webp" class="img-fluid" alt="Registered Nurse Role">
-            </div>
-            <div class="testimonial-meta">
-              <h3>Registered Nurse</h3>
-              <h4>Hospital Setting</h4>
-              <div class="company-logo">
-                <i class="bi bi-heart-pulse"></i>
-              </div>
-            </div>
-          </div>
-          <div class="testimonial-body">
-            <p>We are seeking experienced registered nurses to provide high-quality clinical care in hospital environments.</p>
-          </div>
+          <h3 class="job-title">Registered Nurse</h3>
+          <p class="job-role">Hospital & Clinical Settings</p>
+
+          <ul class="job-details">
+            <li><strong>Work Site:</strong> On-site</li>
+            <li><strong>Shift:</strong> Day & Night Shifts Available</li>
+            <li><strong>Contract:</strong> Full-time / Agency</li>
+            <li><strong>Location:</strong> UK-wide placements</li>
+          </ul>
+
+          <p class="job-description">
+            We are seeking experienced Registered Nurses to deliver safe, compassionate,
+            and high-quality care within hospital environments. You will work as part of
+            a multidisciplinary team supporting patient recovery and wellbeing.
+          </p>
+
+          <a href="#" class="job-cta">Apply for this role</a>
         </div>
       </div>
 
-      <div class="testimonial-item featured" data-aos="zoom-in" data-aos-delay="200">
-        <div class="testimonial-card">
-          <div class="testimonial-header">
-            <div class="testimonial-image">
-              <img src="assets/img/healthcare/job-support.webp" class="img-fluid" alt="Support Worker Role">
-            </div>
-            <div class="testimonial-meta">
-              <h3>Support Worker</h3>
-              <h4>Residential Care</h4>
-              <div class="company-logo">
-                <i class="bi bi-people-fill"></i>
-              </div>
-            </div>
+      <!-- Job Card -->
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="job-card">
+          <div class="job-header">
+            <span class="job-badge hybrid">Hybrid</span>
+            <span class="job-salary">£12 – £16 / hour</span>
           </div>
-          <div class="testimonial-body">
-            <p>Support individuals with daily living activities while promoting dignity, independence, and wellbeing.</p>
-          </div>
+
+          <h3 class="job-title">Support Worker</h3>
+          <p class="job-role">Residential & Community Care</p>
+
+          <ul class="job-details">
+            <li><strong>Work Site:</strong> Hybrid</li>
+            <li><strong>Shift:</strong> Flexible Shifts</li>
+            <li><strong>Contract:</strong> Part-time / Full-time</li>
+            <li><strong>Location:</strong> Residential Homes</li>
+          </ul>
+
+          <p class="job-description">
+            Support individuals with daily living activities while promoting independence,
+            dignity, and emotional wellbeing. Ideal for compassionate professionals who
+            enjoy person-centred care.
+          </p>
+
+          <a href="#" class="job-cta">Apply for this role</a>
         </div>
       </div>
 
-      <div class="testimonial-item" data-aos="zoom-in" data-aos-delay="300">
-        <div class="testimonial-card">
-          <div class="testimonial-header">
-            <div class="testimonial-image">
-              <img src="assets/img/healthcare/job-care.webp" class="img-fluid" alt="Care Assistant Role">
-            </div>
-            <div class="testimonial-meta">
-              <h3>Care Assistant</h3>
-              <h4>Home Care</h4>
-              <div class="company-logo">
-                <i class="bi bi-house-heart"></i>
-              </div>
-            </div>
+      <!-- Job Card -->
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="job-card">
+          <div class="job-header">
+            <span class="job-badge remote">Remote</span>
+            <span class="job-salary">Competitive</span>
           </div>
-          <div class="testimonial-body">
-            <p>Provide compassionate one-to-one care for clients in their own homes, ensuring comfort and safety.</p>
-          </div>
+
+          <h3 class="job-title">Healthcare Coordinator</h3>
+          <p class="job-role">Staffing & Care Coordination</p>
+
+          <ul class="job-details">
+            <li><strong>Work Site:</strong> Remote</li>
+            <li><strong>Shift:</strong> Office Hours</li>
+            <li><strong>Contract:</strong> Permanent</li>
+            <li><strong>Location:</strong> Remote (UK)</li>
+          </ul>
+
+          <p class="job-description">
+            Coordinate healthcare staffing placements, liaise with care providers,
+            and ensure smooth scheduling of healthcare professionals across sites.
+          </p>
+
+          <a href="#" class="job-cta">Apply for this role</a>
         </div>
       </div>
 
-      <div class="testimonial-item" data-aos="zoom-in" data-aos-delay="400">
-        <div class="testimonial-card">
-          <div class="testimonial-header">
-            <div class="testimonial-image">
-              <img src="assets/img/healthcare/job-doctor.webp" class="img-fluid" alt="Doctor Role">
-            </div>
-            <div class="testimonial-meta">
-              <h3>Doctor</h3>
-              <h4>Clinical Services</h4>
-              <div class="company-logo">
-                <i class="bi bi-clipboard2-pulse"></i>
-              </div>
-            </div>
+      <!-- Job Card -->
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+        <div class="job-card">
+          <div class="job-header">
+            <span class="job-badge onsite">On-site</span>
+            <span class="job-salary">£45 – £70 / hour</span>
           </div>
-          <div class="testimonial-body">
-            <p>Deliver expert medical assessment and treatment while working within a multidisciplinary team.</p>
-          </div>
+
+          <h3 class="job-title">Locum Doctor</h3>
+          <p class="job-role">Clinical Services</p>
+
+          <ul class="job-details">
+            <li><strong>Work Site:</strong> On-site</li>
+            <li><strong>Shift:</strong> Locum / Short-term</li>
+            <li><strong>Contract:</strong> Temporary</li>
+            <li><strong>Location:</strong> Hospitals & Clinics</li>
+          </ul>
+
+          <p class="job-description">
+            Deliver high-quality medical assessment and treatment while collaborating
+            with multidisciplinary healthcare teams across clinical environments.
+          </p>
+
+          <a href="#" class="job-cta">Apply for this role</a>
         </div>
       </div>
 
     </div>
-
   </div>
 
-</section><!-- /Featured Job Postings Section -->
+</section>
 
 <!-- Why Us Section -->
 <section id="why-us" class="why-us section">
@@ -1074,7 +981,7 @@ Tobest Health care
   <div class="container footer-top">
     <div class="row gy-4">
       <div class="col-lg-5 col-md-12 footer-about">
-        <a href="index.html" class="logo d-flex align-items-center">
+        <a href="/" class="logo d-flex align-items-center">
           <span class="sitename">ToBest Health Care Solutions</span>
         </a>
         <p>
@@ -1113,9 +1020,9 @@ Tobest Health care
       <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
         <h4>Contact Us</h4>
         <p>ToBest Health Care Solutions</p>
-        <p>Abuja, Nigeria</p>
+        <p>United Kingdom</p>
         <p class="mt-4">
-          <strong>Phone:</strong> <span>+234 XXX XXX XXXX</span>
+          <strong>Phone:</strong> <span>03301331162</span>
         </p>
         <p>
           <strong>Email:</strong> <span>info@tobesthealthcaresolutions.com</span>

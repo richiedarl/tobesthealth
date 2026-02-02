@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Job;
+use App\Models\Offer;
 use App\Models\Role;
 use App\Models\ServiceType;
 use App\Models\CareSetting;
@@ -13,15 +13,16 @@ class AdminJobController extends Controller
 {
     public function index()
     {
-        $jobs = Job::with(['role', 'serviceType', 'careSetting'])
+        $offers = Offer::with(['role', 'serviceType', 'careSetting'])
             ->latest()
             ->paginate(20);
 
-        return view('admin.jobs.index', compact('jobs'));
+        return view('admin.jobs.index', compact('offers'));
     }
 
     public function create()
     {
+        dd('hit');
         return view('admin.jobs.create', [
             'roles' => Role::orderBy('name')->get(),
             'serviceTypes' => ServiceType::orderBy('name')->get(),
@@ -33,42 +34,41 @@ class AdminJobController extends Controller
     {
         $validated = $this->validateJob($request);
 
-        Job::create($validated);
+        Offer::create($validated);
 
         return redirect()
             ->route('jobs.index')
             ->with('success', 'Job posted successfully.');
     }
 
-    public function show(Job $job)
+    public function show(Offer $offers)
     {
-        return view('admin.jobs.show', compact('job'));
+        return view('admin.jobs.show', compact('offers'));
     }
 
-    public function edit(Job $job)
+    public function edit(Offer $offer)
     {
         return view('admin.jobs.edit', [
-            'job' => $job,
+            'offer' => $offer,
             'roles' => Role::orderBy('name')->get(),
             'serviceTypes' => ServiceType::orderBy('name')->get(),
             'careSettings' => CareSetting::orderBy('name')->get(),
         ]);
     }
 
-    public function update(Request $request, Job $job)
+    public function update(Request $request, Offer $offer)
     {
         $validated = $this->validateJob($request);
 
-        $job->update($validated);
-
+        $offer->update($validated);
         return redirect()
             ->route('jobs.index')
             ->with('success', 'Job updated successfully.');
     }
 
-    public function destroy(Job $job)
+    public function destroy(Offer $offer)
     {
-        $job->delete();
+        $offer->delete();
 
         return redirect()
             ->route('jobs.index')

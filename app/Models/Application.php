@@ -8,15 +8,24 @@ class Application extends Model
 {
     //
     protected $fillable = [
-        'job_id',
+        'offer_id',
+        'name',
+        'email',
+        'phone',
+        'resume',
+        'linkedin_profile', //Optional
+        'portfolio_url',   //Optional
+        'additional_info', //Optional
+        'experience_level',
         'candidate_id',
         'cover_letter',
         'status',
+        'opened_at',
     ];
 
-    public function job()
+    public function offer()
     {
-        return $this->belongsTo(Job::class);
+        return $this->belongsTo(Offer::class);
     }
 
     public function candidate()

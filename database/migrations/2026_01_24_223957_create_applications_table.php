@@ -25,7 +25,7 @@ return new class extends Migration {
                 'shortlisted',
                 'rejected'
             ])->default('pending');
-
+            $table->string('opened_at')->default(false);
             $table->timestamps();
 
             // prevent duplicate application to same job

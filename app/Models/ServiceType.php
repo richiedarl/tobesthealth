@@ -9,8 +9,8 @@ class ServiceType extends Model
     //
     protected $fillable = ['name', 'slug'];
 
-    public function jobs()
+    public function offers()
     {
-        return $this->hasMany(Job::class);
+        return $this->hasMany(Offer::class);
     }
 }
