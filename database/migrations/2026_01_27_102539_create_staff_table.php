@@ -51,6 +51,7 @@ return new class extends Migration
 
     // OPTIONAL PROFILE INFO
     $table->text('bio')->nullable();
+    $table->softDeletes();
 
     $table->timestamps();
 });
