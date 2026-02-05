@@ -3,12 +3,20 @@
     use App\Models\ContactEnquiry;
 
     $unreadApplications = class_exists(Application::class)
-        ? Application::whereNull('opened_at')->count()
-        : 0;
+    ? Application::where(function ($q) {
+        $q->whereNull('opened_at')
+          ->orWhere('opened_at', 0);
+    })->count()
+    : 0;
+
 
     $unreadContacts = class_exists(ContactEnquiry::class)
-        ? ContactEnquiry::whereNull('opened_at')->count()
-        : 0;
+    ? ContactEnquiry::where(function ($q) {
+        $q->whereNull('opened_at')
+          ->orWhere('opened_at', 0);
+    })->count()
+    : 0;
+
 @endphp
 
 

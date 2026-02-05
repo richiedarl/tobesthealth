@@ -25,6 +25,7 @@
 
   <!-- Main CSS File -->
   <link href="{{ asset('fe/assets/css/main.css') }}" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- =======================================================
 Tobest Health care
@@ -77,6 +78,29 @@ Tobest Health care
 @yield('content')  
 
   </main>
+
+
+@if (session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: @json(session('success')),
+        timer: 2500,
+        showConfirmButton: false
+    });
+</script>
+@endif
+
+@if (session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: @json(session('error')),
+    });
+</script>
+@endif
 
     <footer id="footer" class="footer accent-background">
 

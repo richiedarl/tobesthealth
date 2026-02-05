@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('subject');
             $table->text('message');
-            $table->string('opened_at')->default(false);
+            $table->string('opened_at')->nullable();
             $table->timestamps();
         });
     }

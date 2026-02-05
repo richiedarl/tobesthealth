@@ -40,6 +40,9 @@ class Staff extends Model
         'years_of_experience' => 'integer',
     ];
 
+        public function applications(){
+        return $this->hasMany(Application::class);
+    }
 
 
     /*
@@ -62,4 +65,5 @@ class Staff extends Model
     {
         return $query->where('is_featured', true);
     }
+
 }

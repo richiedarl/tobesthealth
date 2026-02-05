@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Offer;
+use App\Models\Role;
+use App\Models\ServiceType;
+use App\Models\CareSetting;
 
 class AdminStaffController extends Controller
 {
@@ -16,7 +20,11 @@ class AdminStaffController extends Controller
 
     public function create()
     {
-        return view('admin.staff.create');
+        return view('admin.staff.create', [
+            'roles' => Role::orderBy('name')->get(),
+            'serviceTypes' => ServiceType::orderBy('name')->get(),
+            'careSettings' => CareSetting::orderBy('name')->get(),
+        ]);
     }
 
     public function store(Request $request)
@@ -38,7 +46,12 @@ class AdminStaffController extends Controller
 
     public function edit(Staff $staff)
     {
-        return view('admin.staff.edit', compact('staff'));
+        return view('admin.staff.edit', [
+            'staff' => $staff,
+            'roles' => Role::orderBy('name')->get(),
+            'serviceTypes' => ServiceType::orderBy('name')->get(),
+            'careSettings' => CareSetting::orderBy('name')->get(),
+        ]);
     }
 
     public function update(Request $request, Staff $staff)
@@ -78,7 +91,8 @@ class AdminStaffController extends Controller
             'email'               => ['required', 'email', 'max:255', 'unique:staff,email,' . $request->staff?->id],
             'phone'               => ['nullable', 'string', 'max:20'],
             'gender'              => ['required', 'in:male,female,other'],
-            'role'                => ['required', 'string', 'max:255'],
+            'role'           => ['required', 'exists:roles,name'],
+            'care_specialty' => ['nullable', 'exists:care_settings,name'],
             'nursing_level'       => ['nullable', 'string', 'max:255'],
             'years_of_experience' => ['nullable', 'integer', 'min:0'],
             'care_specialty'      => ['nullable', 'string', 'max:255'],

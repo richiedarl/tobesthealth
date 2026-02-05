@@ -32,7 +32,8 @@
                     <form method="POST"
                           action="{{ route('applications.store', $offer->id) }}"
                           enctype="multipart/form-data">
-                        @csrf
+                        
+                        {{ csrf_field() }}
 
                         <div class="row">
 

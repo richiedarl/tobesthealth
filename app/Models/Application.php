@@ -9,6 +9,7 @@ class Application extends Model
     //
     protected $fillable = [
         'offer_id',
+        'staff_id',
         'name',
         'email',
         'phone',
@@ -23,6 +24,10 @@ class Application extends Model
         'opened_at',
     ];
 
+    public function staff()
+    {
+        return $this->belongsTo(Staff::class);
+    }
     public function offer()
     {
         return $this->belongsTo(Offer::class);

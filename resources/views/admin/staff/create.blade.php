@@ -5,7 +5,6 @@
 <div class="container-fluid">
     <h1 class="h3 mb-4 text-gray-800">Add New Staff Member</h1>
 
-    {{-- Validation Errors --}}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul class="mb-0">
@@ -43,17 +42,24 @@
             <div class="col-md-6 mb-3">
                 <label>Gender *</label>
                 <select name="gender" class="form-control" required>
-                    <option value="">-- Select Gender --</option>
-                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
-                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
-                    <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                    <option value="">Select Gender</option>
+                    <option value="male" @selected(old('gender') === 'male')>Male</option>
+                    <option value="female" @selected(old('gender') === 'female')>Female</option>
+                    <option value="other" @selected(old('gender') === 'other')>Other</option>
                 </select>
             </div>
 
             {{-- Role --}}
             <div class="col-md-6 mb-3">
                 <label>Role *</label>
-                <input type="text" name="role" class="form-control" value="{{ old('role') }}" required>
+                <select name="role" class="form-control" required>
+                    <option value="">Select Role</option>
+                    @foreach($roles as $role)
+                        <option value="{{ $role->name }}" @selected(old('role') === $role->name)>
+                            {{ $role->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             {{-- Nursing Level --}}
@@ -65,13 +71,20 @@
             {{-- Years of Experience --}}
             <div class="col-md-6 mb-3">
                 <label>Years of Experience</label>
-                <input type="number" name="years_of_experience" class="form-control" value="{{ old('years_of_experience') }}" min="0">
+                <input type="number" name="years_of_experience" class="form-control" min="0" value="{{ old('years_of_experience') }}">
             </div>
 
             {{-- Care Specialty --}}
             <div class="col-md-6 mb-3">
                 <label>Care Specialty</label>
-                <input type="text" name="care_specialty" class="form-control" value="{{ old('care_specialty') }}">
+                <select name="care_specialty" class="form-control">
+                    <option value="">Select Care Specialty</option>
+                    @foreach($careSettings as $setting)
+                        <option value="{{ $setting->name }}" @selected(old('care_specialty') === $setting->name)>
+                            {{ $setting->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             {{-- License Number --}}
@@ -81,33 +94,24 @@
             </div>
 
             {{-- License Verified --}}
-            <div class="col-md-6 mb-3 d-flex align-items-center">
+            <div class="col-md-6 mb-3">
                 <input type="hidden" name="license_verified" value="0">
-                <input type="checkbox" name="license_verified" value="1" class="form-check-input" {{ old('license_verified') ? 'checked' : '' }}>
-                <label class="ml-2">License Verified</label>
+                <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox" name="license_verified" value="1" @checked(old('license_verified'))>
+                    <label class="form-check-label">License Verified</label>
+                </div>
             </div>
 
             {{-- Skills --}}
             <div class="col-md-12 mb-3">
                 <label>Skills</label>
                 <div id="skills-wrapper">
-                    @if(old('skills'))
-                        @foreach(old('skills') as $skill)
-                        <div class="input-group mb-2">
-                            <input type="text" name="skills[]" class="form-control" value="{{ $skill }}" placeholder="Enter a skill">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-danger remove-skill">&times;</button>
-                            </div>
+                    <div class="input-group mb-2">
+                        <input type="text" name="skills[]" class="form-control" placeholder="Enter a skill">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-success add-skill">+</button>
                         </div>
-                        @endforeach
-                    @else
-                        <div class="input-group mb-2">
-                            <input type="text" name="skills[]" class="form-control" placeholder="Enter a skill">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-success add-skill">+</button>
-                            </div>
-                        </div>
-                    @endif
+                    </div>
                 </div>
             </div>
 
@@ -119,28 +123,31 @@
 
             {{-- Availability --}}
             <div class="col-md-6 mb-3">
-                <input type="hidden" name="is_available" value="0">
-                <input type="checkbox" name="is_available" value="1" class="form-check-input" {{ old('is_available', true) ? 'checked' : '' }}>
-                <label class="ml-2">Available</label>
-            </div>
-
-            <div class="col-md-6 mb-3">
                 <label>Availability Type</label>
-                <input type="text" name="availability_type" class="form-control" value="{{ old('availability_type') }}">
+                <select name="availability_type" class="form-control">
+                    <option value="">Select Availability</option>
+                    <option value="On-site" @selected(old('availability_type') === 'On-site')>On-site</option>
+                    <option value="Remote" @selected(old('availability_type') === 'Remote')>Remote</option>
+                    <option value="Hybrid" @selected(old('availability_type') === 'Hybrid')>Hybrid</option>
+                </select>
             </div>
 
-            {{-- Active --}}
+            {{-- Status --}}
             <div class="col-md-6 mb-3">
                 <input type="hidden" name="is_active" value="0">
-                <input type="checkbox" name="is_active" value="1" class="form-check-input" {{ old('is_active', true) ? 'checked' : '' }}>
-                <label class="ml-2">Active</label>
+                <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox" name="is_active" value="1" checked>
+                    <label class="form-check-label">Active</label>
+                </div>
             </div>
 
             {{-- Featured --}}
             <div class="col-md-6 mb-3">
                 <input type="hidden" name="is_featured" value="0">
-                <input type="checkbox" name="is_featured" value="1" class="form-check-input" {{ old('is_featured') ? 'checked' : '' }}>
-                <label class="ml-2">Featured</label>
+                <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox" name="is_featured" value="1">
+                    <label class="form-check-label">Featured</label>
+                </div>
             </div>
 
             {{-- Bio --}}
@@ -151,33 +158,31 @@
 
         </div>
 
-        <button type="submit" class="btn btn-primary">Save Staff Member</button>
+        <button type="submit" class="btn btn-primary">
+            Save Staff Member
+        </button>
     </form>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const wrapper = document.getElementById('skills-wrapper');
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('add-skill')) {
+        const wrapper = document.getElementById('skills-wrapper');
+        const div = document.createElement('div');
+        div.className = 'input-group mb-2';
+        div.innerHTML = `
+            <input type="text" name="skills[]" class="form-control" placeholder="Enter a skill">
+            <div class="input-group-append">
+                <button type="button" class="btn btn-danger remove-skill">&times;</button>
+            </div>
+        `;
+        wrapper.appendChild(div);
+    }
 
-    // Add skill
-    wrapper.addEventListener('click', function(e) {
-        if(e.target.classList.contains('add-skill')) {
-            const div = document.createElement('div');
-            div.classList.add('input-group', 'mb-2');
-            div.innerHTML = `
-                <input type="text" name="skills[]" class="form-control" placeholder="Enter a skill">
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-danger remove-skill">&times;</button>
-                </div>
-            `;
-            wrapper.appendChild(div);
-        }
-
-        // Remove skill
-        if(e.target.classList.contains('remove-skill')) {
-            e.target.closest('.input-group').remove();
-        }
-    });
+    if (e.target.classList.contains('remove-skill')) {
+        e.target.closest('.input-group').remove();
+    }
 });
 </script>
+
 @endsection

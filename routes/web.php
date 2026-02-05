@@ -22,6 +22,22 @@ Route::get('/', [
    IndexController::class, 'index' 
 ])->name('index');
 
+Route::get('/services', [
+   IndexController::class, 'services' 
+])->name('services');
+
+Route::get('/about', [
+   IndexController::class, 'about' 
+])->name('about');
+
+Route::get('/contact', [
+   IndexController::class, 'contact' 
+])->name('contact');
+
+Route::post('/contact/store', [
+   IndexController::class, 'store_contact' 
+])->name('store_contact');
+
 /**
  * Public job offers (users / candidates)
  */
@@ -34,7 +50,7 @@ Route::get('/jobs/{offer}', [UserOfferController::class, 'show'])
 Route::get('/jobs/{offer}/apply', [ApplicationController::class, 'create'])
     ->name('applications.create');
 
-    Route::post('/jobs/{offer}/submit', [ApplicationController::class, 'submit_apply'])
+    Route::post('/jobs/{offer}/submit', [ApplicationController::class, 'store'])
     ->name('applications.store');
 
 /*
@@ -96,6 +112,13 @@ Route::delete('offers/{offer}', [AdminOfferController::class, 'destroy'])
 |--------------------------------------------------------------------------
 */
 
+Route::get('/staff/{staff}/apply/{offer}', [ApplicationController::class, 'createStaff'])
+    ->name('staff.apply');
+
+Route::post('/staff/{staff}/apply/{offer}', [ApplicationController::class, 'storeStaff'])
+    ->name('staff.apply.store');
+
+
 Route::get('staff', [AdminStaffController::class, 'index'])
     ->middleware('auth')
     ->name('admin.staff.index');
@@ -137,6 +160,13 @@ Route::get('applications', [AdminApplicationController::class, 'index'])
 Route::patch('applications/{application}/approve', [AdminApplicationController::class, 'approve'])
     ->middleware('auth')
     ->name('admin.applications.approve');
+
+    Route::get('applications/{application}/show', [AdminApplicationController::class, 'show'])
+    ->middleware('auth')
+    ->name('admin.applications.show');
+
+    Route::patch('/admin/applications/{application}/status', [AdminApplicationController::class, 'updateStatus'])
+    ->name('admin.applications.status');
 
 /*
 |--------------------------------------------------------------------------

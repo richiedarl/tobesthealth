@@ -6,11 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Application;
 use App\Models\Candidate;
 use App\Models\Offer;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Staff;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminApplicationNotification;
 
 class ApplicationController extends Controller
 {
-    //
+    /**
+     * Show apply page
+     */
     public function create(Offer $offer)
     {
         abort_if(!$offer->is_active, 404);
@@ -19,10 +24,12 @@ class ApplicationController extends Controller
     }
 
     /**
-     * Store application + candidate
+     * Store application (candidate OR staff)
      */
     public function store(Request $request, Offer $offer)
     {
+        abort_if(!$offer->is_active, 404);
+
         $data = $request->validate([
             'first_name'        => ['required', 'string', 'max:255'],
             'last_name'         => ['required', 'string', 'max:255'],
@@ -35,10 +42,18 @@ class ApplicationController extends Controller
             'portfolio_url'     => ['nullable', 'url'],
             'cover_letter'      => ['nullable', 'string'],
             'additional_info'   => ['nullable', 'string'],
+            'staff_id' => ['nullable', 'exists:staff,id'],
+
         ]);
 
         /**
-         * Create or fetch candidate
+         * Detect staff application
+         */
+        $staffId = $request->input('staff_id'); // nullable
+
+
+        /**
+         * Create or fetch candidate (even for staff, for unified admin view)
          */
         $candidate = Candidate::firstOrCreate(
             ['email' => $data['email']],
@@ -51,11 +66,25 @@ class ApplicationController extends Controller
         );
 
         /**
+         * Prevent duplicate application
+         */
+        $duplicate = Application::where('offer_id', $offer->id)
+            ->when($staffId, fn ($q) => $q->where('staff_id', $staffId))
+            ->when(!$staffId, fn ($q) => $q->where('candidate_id', $candidate->id))
+            ->exists();
+
+        if ($duplicate) {
+            return back()->with(
+                'success',
+                'You have already applied for this job. Our team will review your application.'
+            );
+        }
+
+        /**
          * Upload CV
          */
         $cvPath = $request->file('resume')->store('cvs', 'public');
 
-        // Update CV if missing
         if (!$candidate->cv_path) {
             $candidate->update(['cv_path' => $cvPath]);
         }
@@ -64,71 +93,108 @@ class ApplicationController extends Controller
          * Create application
          */
         $application = Application::create([
-        'offer_id'         => $offer->id,
-        'candidate_id'     => $candidate->id,
-        'name'             => $candidate->first_name . ' ' . $candidate->last_name,
-        'email'            => $candidate->email,
-        'phone'            => $candidate->phone,
-        'resume'           => $cvPath,
-        'linkedin_profile' => $data['linkedin_profile'] ?? null,
-        'portfolio_url'    => $data['portfolio_url'] ?? null,
-        'experience_level' => $data['experience_level'],
-        'cover_letter'     => $data['cover_letter'] ?? null,
-        'additional_info'  => $data['additional_info'] ?? null,
-        'status'           => 'submitted',
-        'opened_at'        => now(),
-    ]);
+            'offer_id'         => $offer->id,
+            'candidate_id'     => $staffId ? null : $candidate->id,
+            'staff_id'         => $staffId,
+            'name'             => $candidate->first_name . ' ' . $candidate->last_name,
+            'email'            => $candidate->email,
+            'phone'            => $candidate->phone,
+            'resume'           => $cvPath,
+            'linkedin_profile' => $data['linkedin_profile'] ?? null,
+            'portfolio_url'    => $data['portfolio_url'] ?? null,
+            'experience_level' => $data['experience_level'],
+            'cover_letter'     => $data['cover_letter'] ?? null,
+            'additional_info'  => $data['additional_info'] ?? null,
+            'status'           => 'submitted',
+            'opened_at'        => null,
+        ]);
 
-    $emailSent = $this->notifyAdminOfApplication($application);
-
+        /**
+         * Notify admin (fail-safe)
+         */
+        $emailSent = $this->notifyAdminOfApplication($application);
 
         return redirect()
-    ->route('jobs.show', $offer->id)
-    ->with(
-        'success',
-        $emailSent
-            ? 'Your application has been submitted successfully.'
-            : 'Your application was submitted successfully. Our team has been notified and will review it shortly.'
-    );
-
+            ->route('jobs.show', $offer->id)
+            ->with(
+                'success',
+                $emailSent
+                    ? 'Your application has been submitted successfully.'
+                    : 'Your application was submitted successfully. Our team will review it shortly.'
+            );
     }
 
+    /**
+     * Notify admin of new application
+     */
     protected function notifyAdminOfApplication(Application $application): bool
-{
-    try {
-        $to = 'admin@tobesthealth.com';
-        $subject = 'New Job Application Received';
+    {
+        try {
+            Mail::to('admin@tobesthealth.com')
+                ->send(new AdminApplicationNotification($application));
 
-        $message = "
-A new job application has been submitted.
+            return true;
+        } catch (\Throwable $e) {
+            logger()->warning('Admin application email failed', [
+                'application_id' => $application->id,
+                'error' => $e->getMessage(),
+            ]);
 
-Job Title: {$application->offer->title}
-Applicant Name: {$application->name}
-Email: {$application->email}
-Phone: {$application->phone}
-Experience Level: {$application->experience_level}
-
-Login to admin panel to view full details.
-";
-
-        $headers = implode("\r\n", [
-            'From: TobestHealth <no-reply@tobesthealth.com>',
-            'Reply-To: no-reply@tobesthealth.com',
-            'Content-Type: text/plain; charset=UTF-8',
-        ]);
-
-        return mail($to, $subject, $message, $headers);
-
-    } catch (\Throwable $e) {
-        // Fail silently — log only if you want
-        logger()->warning('Admin email failed', [
-            'error' => $e->getMessage(),
-            'application_id' => $application->id,
-        ]);
-
-        return false;
+            return false;
+        }
     }
+
+    public function createStaff(Staff $staff, Offer $offer)
+{
+    abort_if(!$offer->is_active, 404);
+
+    return view('user.staff.apply', compact('staff', 'offer'));
 }
 
+public function storeStaff(Request $request, Staff $staff, Offer $offer)
+{
+    // Prevent duplicate staff application per offer
+    $exists = Application::where('offer_id', $offer->id)
+        ->where('staff_id', $staff->id)
+        ->exists();
+
+    if ($exists) {
+        return back()->with('error', 'An application already exists for this staff on this offer.');
+    }
+
+    $data = $request->validate([
+        'name'             => ['required', 'string', 'max:255'],
+        'email'            => ['required', 'email', 'max:255'],
+        'phone'            => ['required', 'string', 'max:20'],
+        'experience_level' => ['required', 'string', 'max:255'],
+        'additional_info'  => ['nullable', 'string'],
+        'cover_letter'     => ['nullable', 'string'],
+    ]);
+
+    $application = Application::create([
+        'offer_id'         => $offer->id,
+        'staff_id'         => $staff->id,
+        'candidate_id'     => null,
+
+        'name'             => $data['name'],
+        'email'            => $data['email'],
+        'phone'            => $data['phone'],
+        'experience_level' => $data['experience_level'],
+        'additional_info'  => $data['additional_info'] ?? null,
+        'cover_letter'     => $data['cover_letter'] ?? null,
+
+        // staff already has CV
+        'resume'           => $staff->photo ?? 'staff-profile',
+
+        'status'           => 'submitted',
+        'opened_at'        => null,
+    ]);
+
+    $this->notifyAdminOfApplication($application);
+
+    return redirect()
+        ->route('jobs.show', $offer->id)
+        ->with('success', 'Your staff request has been submitted successfully.');
+}
 
 }
