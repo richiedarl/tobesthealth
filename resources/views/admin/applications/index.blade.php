@@ -41,16 +41,18 @@
                 <td>{{ $app->offer->title }}</td>
 
                 <td>
-                    <form method="POST" action="{{ route('admin.applications.status', $app) }}">
-                        @csrf @method('PATCH')
-                        <select name="status" onchange="this.form.submit()">
-                            @foreach(['submitted','pending','reviewed','shortlisted','rejected'] as $status)
-                                <option value="{{ $status }}" {{ $app->status === $status ? 'selected' : '' }}>
-                                    {{ ucfirst($status) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </form>
+                <form method="POST" action="{{ route('change.status.application', $app) }}">
+                @csrf
+
+                <select name="status" onchange="this.form.submit()">
+                    @foreach(['submitted','pending','reviewed','shortlisted','rejected'] as $status)
+                        <option value="{{ $status }}" {{ $app->status === $status ? 'selected' : '' }}>
+                            {{ ucfirst($status) }}
+                        </option>
+                    @endforeach
+                </select>
+                </form>
+
                 </td>
 
                 <td>

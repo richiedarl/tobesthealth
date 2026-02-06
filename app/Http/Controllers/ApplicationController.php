@@ -144,14 +144,14 @@ class ApplicationController extends Controller
         }
     }
 
-    public function createStaff(Staff $staff, Offer $offer)
+    public function createStaff(Staff $staff)
 {
     abort_if(!$offer->is_active, 404);
 
-    return view('user.staff.apply', compact('staff', 'offer'));
+    return view('user.staff.apply', compact('staff'));
 }
 
-public function storeStaff(Request $request, Staff $staff, Offer $offer)
+public function storeStaff(Request $request, Staff $staff)
 {
     // Prevent duplicate staff application per offer
     $exists = Application::where('offer_id', $offer->id)
@@ -172,10 +172,9 @@ public function storeStaff(Request $request, Staff $staff, Offer $offer)
     ]);
 
     $application = Application::create([
-        'offer_id'         => $offer->id,
+        'offer_id'         => $offer->id ?? null ,
         'staff_id'         => $staff->id,
         'candidate_id'     => null,
-
         'name'             => $data['name'],
         'email'            => $data['email'],
         'phone'            => $data['phone'],

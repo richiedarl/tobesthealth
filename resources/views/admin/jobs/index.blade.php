@@ -19,10 +19,6 @@
             @if ($offers->count() === 0)
                 <p class="text-muted mb-0">No job offers have been created yet.</p>
             @else
-            @if($offer->match_score >= 3)
-    <span class="badge bg-success">Best Match</span>
-        @endif
-
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
 

@@ -18,6 +18,8 @@ use App\Http\Controllers\IndexController;
 |--------------------------------------------------------------------------
 */
 
+
+
 Route::get('/', [
    IndexController::class, 'index' 
 ])->name('index');
@@ -30,7 +32,7 @@ Route::get('/about', [
    IndexController::class, 'about' 
 ])->name('about');
 
-Route::get('/contact', [
+Route::get('contact', [
    IndexController::class, 'contact' 
 ])->name('contact');
 
@@ -112,10 +114,10 @@ Route::delete('offers/{offer}', [AdminOfferController::class, 'destroy'])
 |--------------------------------------------------------------------------
 */
 
-Route::get('/staff/{staff}/apply/{offer}', [ApplicationController::class, 'createStaff'])
+Route::get('/staff/{staff}/apply', [ApplicationController::class, 'createStaff'])
     ->name('staff.apply');
 
-Route::post('/staff/{staff}/apply/{offer}', [ApplicationController::class, 'storeStaff'])
+Route::post('/staff/{staff}/apply', [ApplicationController::class, 'storeStaff'])
     ->name('staff.apply.store');
 
 
@@ -164,9 +166,14 @@ Route::patch('applications/{application}/approve', [AdminApplicationController::
     Route::get('applications/{application}/show', [AdminApplicationController::class, 'show'])
     ->middleware('auth')
     ->name('admin.applications.show');
-
-    Route::patch('/admin/applications/{application}/status', [AdminApplicationController::class, 'updateStatus'])
+    
+    Route::get('admin/applications/{application}/status', [AdminApplicationController::class, 'updateStatus'])
+    ->middleware('auth')
     ->name('admin.applications.status');
+
+    Route::post('change/application/status/{application}',[
+        AdminApplicationController::class, 'updateStatus'])
+        ->name('change.status.application');
 
 /*
 |--------------------------------------------------------------------------

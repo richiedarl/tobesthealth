@@ -217,28 +217,47 @@ Tobest Health care
                 </div>
               </div>
 
-              <div class="agent-card">
-                <div class="agent-profile">
-                  <img src="{{ asset('fe/assets/img/healthcare/agent-7.webp')}}" alt="Care Consultant" class="agent-photo">
-                  <div class="agent-info">
-                    <h4>Senior Care Consultant</h4>
-                    <p>Nurse-Led Recruitment</p>
-                    <div class="agent-rating">
-                      <div class="stars">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                      </div>
-                      <span class="rating-text">Trusted by Care Providers</span>
-                    </div>
-                  </div>
+             <div class="agent-card">
+    <div class="agent-profile">
+
+        <img
+            src="{{ isset($featuredStaff) && $featuredStaff && $featuredStaff->photo
+                    ? asset('storage/'.$featuredStaff->photo)
+                    : asset('fe/assets/img/healthcare/agent-7.webp') }}"
+            alt="Care Consultant"
+            class="agent-photo"
+        >
+
+        <div class="agent-info">
+            <h4>
+                {{ $featuredStaff->full_name ?? 'Senior Care Consultant' }}
+            </h4>
+
+            <p>
+                {{ $featuredStaff->role ?? 'Nurse-Led Recruitment' }}
+            </p>
+
+            <div class="agent-rating">
+                <div class="stars">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
                 </div>
-                <button class="contact-agent-btn">
-                  <i class="bi bi-chat-dots"></i>
-                </button>
-              </div>
+
+                <span class="rating-text">
+                    {{ $featuredStaff ? 'Available for Placement' : 'Trusted by Care Providers' }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {{-- <button class="contact-agent-btn">
+        <i class="bi bi-chat-dots"></i>
+    </button> --}}
+</div>
+
             </div>
           </div>
         </div><!-- End Hero Visual -->
@@ -317,7 +336,7 @@ Tobest Health care
           </div>
 
           <div class="action-section">
-            <a href="about.html" class="btn-cta">
+            <a href="/about" class="btn-cta">
               <span>Discover Our Story</span>
               <i class="bi bi-arrow-right"></i>
             </a>
@@ -391,7 +410,7 @@ Tobest Health care
               <li><i class="bi bi-check-circle-fill"></i> Emergency & Long-Term Cover</li>
               <li><i class="bi bi-check-circle-fill"></i> Nurse-Led Oversight</li>
             </ul>
-            <a href="services.html" class="service-link">
+            <a href="/services" class="service-link">
               <span>Learn More</span>
               <i class="bi bi-arrow-up-right"></i>
             </a>
@@ -419,23 +438,32 @@ Tobest Health care
     <!-- Featured Staffing Section -->
 <section id="featured-properties" class="featured-properties section">
 
-  <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
     <h2>Featured Care Solutions</h2>
     <p>Reliable, compassionate healthcare professionals matched to the right care environments</p>
-  </div><!-- End Section Title -->
+  </div>
 
   <div class="container" data-aos="fade-up" data-aos-delay="100">
-
     <div class="row gy-5">
 
+      {{-- MAIN FEATURED STAFF --}}
       <div class="col-lg-8">
-
         <div class="featured-property-main" data-aos="zoom-in" data-aos-delay="200">
+
           <div class="property-hero">
-            <img src="{{ asset('fe/assets/img/healthcare/agent-1.webp') }}" alt="Healthcare Staffing" class="img-fluid">
+            <img
+              src="{{ $featuredStaff && $featuredStaff->photo
+                    ? asset('storage/'.$featuredStaff->photo)
+                    : asset('fe/assets/img/healthcare/agent-1.webp') }}"
+              class="img-fluid"
+              alt="Healthcare Staffing"
+            >
+
             <div class="property-overlay">
-              <div class="property-badge-main premium">Nurse-Led</div>
+              <div class="property-badge-main premium">
+                {{ $featuredStaff ? 'Available Staff' : 'Nurse-Led' }}
+              </div>
+
               <div class="property-stats">
                 <div class="stat-item">
                   <i class="bi bi-heart-pulse"></i>
@@ -452,94 +480,141 @@ Tobest Health care
               </div>
             </div>
           </div>
+
           <div class="property-hero-content">
             <div class="property-header">
               <div class="property-info">
-                <h2><a href="#">Comprehensive Healthcare Staffing</a></h2>
+                <h2>
+                  <a href="#">
+                    {{ $featuredStaff->full_name ?? 'Comprehensive Healthcare Staffing' }}
+                  </a>
+                </h2>
+
                 <div class="property-address">
                   <i class="bi bi-geo-alt-fill"></i>
-                  <span>Care Homes, Hospitals & Home Care</span>
+                  <span>
+                    {{ $featuredStaff->care_specialty ?? 'Care Homes, Hospitals & Home Care' }}
+                  </span>
                 </div>
               </div>
-              <div class="property-price-main">UK-Wide</div>
+
+              <div class="property-price-main">
+                {{ $featuredStaff ? 'Available Now' : 'UK-Wide' }}
+              </div>
             </div>
+
             <p class="property-description">
-              Nurse-led recruitment delivering dependable care assistants, nurses, and doctors to support
-              safe, dignified, and high-quality care across all settings.
+              {{ $featuredStaff->bio
+                  ?? 'Nurse-led recruitment delivering dependable care assistants, nurses, and doctors to support safe, dignified, and high-quality care across all settings.' }}
             </p>
+
             <div class="property-actions-main">
-              <a href="contact.html" class="btn-primary-custom">Request Staff</a>
-              <a href="services.html" class="btn-outline-custom">Our Services</a>
+              <a
+                href="{{ $featuredStaff
+                        ? route('staff.apply', $featuredStaff)
+                        : route('contact') }}"
+                class="btn-primary-custom"
+              >
+                {{ $featuredStaff ? 'Apply for Staff' : 'Request Staff' }}
+              </a>
+
+              <a href="{{ route('services') }}" class="btn-outline-custom">
+                Our Services
+              </a>
+
               <div class="property-listing-info">
                 <span class="listing-status for-sale">Available Now</span>
                 <span class="listing-date">Fast Placement</span>
               </div>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
 
+      {{-- SIDEBAR STAFF --}}
       <div class="col-lg-4">
-
         <div class="properties-sidebar">
 
-          <div class="sidebar-property-card" data-aos="fade-left" data-aos-delay="300">
-            <div class="sidebar-property-image">
-              <img src="{{ asset('fe/assets/img/healthcare/support-staff.jpg') }}" alt="Support Workers" class="img-fluid">
-              <div class="sidebar-property-badge hot">In Demand</div>
-            </div>
-            <div class="sidebar-property-content">
-              <h4><a href="#">Care Assistants & Support Workers</a></h4>
-              <div class="sidebar-location">
-                <i class="bi bi-hospital"></i>
-                <span>Residential & Home Care</span>
-              </div>
-              <div class="sidebar-specs">
-                <span><i class="bi bi-check2-circle"></i> Trained</span>
-                <span><i class="bi bi-check2-circle"></i> Compassionate</span>
-                <span><i class="bi bi-check2-circle"></i> Reliable</span>
-              </div>
-              <div class="sidebar-price-row">
-                <div class="sidebar-price">Flexible Cover</div>
-                <a href="contact.html" class="sidebar-btn">Enquire</a>
-              </div>
-            </div>
-          </div>
+          @forelse($sideStaffs as $staff)
+            <div class="sidebar-property-card" data-aos="fade-left">
 
-          <div class="sidebar-property-card" data-aos="fade-left" data-aos-delay="400">
-            <div class="sidebar-property-image">
-              <img src="{{ asset('fe/assets/img/healthcare/nurses.webp') }}" alt="Registered Nurses" class="img-fluid">
-              <div class="sidebar-property-badge new">Trusted</div>
+              <div class="sidebar-property-image">
+                <img
+                  src="{{ $staff->photo
+                        ? asset('storage/'.$staff->photo)
+                        : asset('fe/assets/img/healthcare/support-staff.jpg') }}"
+                  class="img-fluid"
+                >
+                <div class="sidebar-property-badge hot">Available</div>
+              </div>
+
+              <div class="sidebar-property-content">
+                <h4>
+                  <a href="{{ route('staff.apply', $staff) }}">
+                    {{ $staff->full_name }}
+                  </a>
+                </h4>
+
+                <div class="sidebar-location">
+                  <i class="bi bi-hospital"></i>
+                  <span>{{ $staff->care_specialty ?? 'Healthcare Support' }}</span>
+                </div>
+
+                <div class="sidebar-specs">
+                  <span><i class="bi bi-check2-circle"></i> Trained</span>
+                  <span><i class="bi bi-check2-circle"></i> Verified</span>
+                  <span><i class="bi bi-check2-circle"></i> Reliable</span>
+                </div>
+
+                <div class="sidebar-price-row">
+                  <div class="sidebar-price">Flexible Cover</div>
+                  <a href="{{ route('staff.apply', $staff) }}" class="sidebar-btn">
+                    Enquire
+                  </a>
+                </div>
+              </div>
+
             </div>
-            <div class="sidebar-property-content">
-              <h4><a href="#">Registered Nurses & Doctors</a></h4>
-              <div class="sidebar-location">
-                <i class="bi bi-clipboard2-pulse"></i>
-                <span>Hospitals & Clinical Settings</span>
+          @empty
+            {{-- FALLBACK CARD --}}
+            <div class="sidebar-property-card">
+              <div class="sidebar-property-image">
+                <img src="{{ asset('fe/assets/img/healthcare/support-staff.jpg') }}" class="img-fluid">
+                <div class="sidebar-property-badge hot">In Demand</div>
               </div>
-              <div class="sidebar-specs">
-                <span><i class="bi bi-award"></i> Experienced</span>
-                <span><i class="bi bi-shield"></i> Compliant</span>
-                <span><i class="bi bi-people"></i> Patient-Focused</span>
-              </div>
-              <div class="sidebar-price-row">
-                <div class="sidebar-price">On-Demand</div>
-                <a href="contact.html" class="sidebar-btn">Enquire</a>
+
+              <div class="sidebar-property-content">
+                <h4>Care Assistants & Support Workers</h4>
+                <div class="sidebar-location">
+                  <i class="bi bi-hospital"></i>
+                  <span>Residential & Home Care</span>
+                </div>
+
+                <div class="sidebar-specs">
+                  <span><i class="bi bi-check2-circle"></i> Trained</span>
+                  <span><i class="bi bi-check2-circle"></i> Compassionate</span>
+                  <span><i class="bi bi-check2-circle"></i> Reliable</span>
+                </div>
+
+                <div class="sidebar-price-row">
+                  <div class="sidebar-price">Flexible Cover</div>
+                  <a href="{{ route('contact') }}" class="sidebar-btn">Enquire</a>
+                </div>
               </div>
             </div>
-          </div>
+          @endforelse
 
         </div>
-
       </div>
 
     </div>
   </div>
 </section>
 
+
 <!-- Featured Healthcare Workers Section -->
-<section id="featured-agents" class="featured-agents section">
+{{-- <section id="featured-agents" class="featured-agents section">
 
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
@@ -651,12 +726,11 @@ Tobest Health care
 
   </div>
 
-</section><!-- /Featured Healthcare Workers Section -->
+</section><!-- /Featured Healthcare Workers Section --> --}}
 
 
 <section id="job-postings" class="job-postings section light-background">
 
-  <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
     <h2>Featured Job Postings</h2>
     <p>Current healthcare opportunities available through Tobest Healthcare Solutions</p>
@@ -665,120 +739,96 @@ Tobest Health care
   <div class="container">
     <div class="row gy-4">
 
-      <!-- Job Card -->
-      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-        <div class="job-card">
-          <div class="job-header">
-            <span class="job-badge onsite">On-site</span>
-            <span class="job-salary">£28 – £38 / hour</span>
+      @forelse($featuredOffers as $offer)
+        <div class="col-lg-6" data-aos="fade-up">
+          <div class="job-card">
+
+            <div class="job-header">
+              <span class="job-badge onsite">
+                {{ $offer->serviceType->name ?? 'On-site' }}
+              </span>
+
+              <span class="job-salary">
+                £{{ $offer->salary_range ?? 'Competitive' }}
+              </span>
+            </div>
+
+            <h3 class="job-title">
+              {{ $offer->title }}
+            </h3>
+
+            <p class="job-role">
+              {{ $offer->careSetting->name ?? 'Healthcare Setting' }}
+            </p>
+
+            <ul class="job-details">
+              <li><strong>Work Site:</strong> {{ $offer->serviceType->name ?? '—' }}</li>
+              <li><strong>Contract:</strong> Agency / Permanent</li>
+              <li><strong>Location:</strong> {{ $offer->location }}</li>
+            </ul>
+
+            <p class="job-description">
+              {{ Str::limit(strip_tags($offer->description), 180) }}
+            </p>
+
+            <a href="{{ route('jobs.show', $offer->id) }}" class="job-cta">
+              Apply for this role
+            </a>
+
           </div>
-
-          <h3 class="job-title">Registered Nurse</h3>
-          <p class="job-role">Hospital & Clinical Settings</p>
-
-          <ul class="job-details">
-            <li><strong>Work Site:</strong> On-site</li>
-            <li><strong>Shift:</strong> Day & Night Shifts Available</li>
-            <li><strong>Contract:</strong> Full-time / Agency</li>
-            <li><strong>Location:</strong> UK-wide placements</li>
-          </ul>
-
-          <p class="job-description">
-            We are seeking experienced Registered Nurses to deliver safe, compassionate,
-            and high-quality care within hospital environments. You will work as part of
-            a multidisciplinary team supporting patient recovery and wellbeing.
-          </p>
-
-          <a href="#" class="job-cta">Apply for this role</a>
         </div>
-      </div>
+      @empty
 
-      <!-- Job Card -->
-      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-        <div class="job-card">
-          <div class="job-header">
-            <span class="job-badge hybrid">Hybrid</span>
-            <span class="job-salary">£12 – £16 / hour</span>
+        {{-- FALLBACK CARD 1 --}}
+        <div class="col-lg-6">
+          <div class="job-card">
+            <div class="job-header">
+              <span class="job-badge onsite">On-site</span>
+              <span class="job-salary">£28 – £38 / hour</span>
+            </div>
+
+            <h3 class="job-title">Registered Nurse</h3>
+            <p class="job-role">Hospital & Clinical Settings</p>
+
+            <p class="job-description">
+              Experienced nurses delivering safe, compassionate, high-quality care
+              across hospital environments.
+            </p>
+
+            <a href="{{ route('contact') }}" class="job-cta">
+              Enquire
+            </a>
           </div>
-
-          <h3 class="job-title">Support Worker</h3>
-          <p class="job-role">Residential & Community Care</p>
-
-          <ul class="job-details">
-            <li><strong>Work Site:</strong> Hybrid</li>
-            <li><strong>Shift:</strong> Flexible Shifts</li>
-            <li><strong>Contract:</strong> Part-time / Full-time</li>
-            <li><strong>Location:</strong> Residential Homes</li>
-          </ul>
-
-          <p class="job-description">
-            Support individuals with daily living activities while promoting independence,
-            dignity, and emotional wellbeing. Ideal for compassionate professionals who
-            enjoy person-centred care.
-          </p>
-
-          <a href="#" class="job-cta">Apply for this role</a>
         </div>
-      </div>
 
-      <!-- Job Card -->
-      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-        <div class="job-card">
-          <div class="job-header">
-            <span class="job-badge remote">Remote</span>
-            <span class="job-salary">Competitive</span>
+        {{-- FALLBACK CARD 2 --}}
+        <div class="col-lg-6">
+          <div class="job-card">
+            <div class="job-header">
+              <span class="job-badge hybrid">Hybrid</span>
+              <span class="job-salary">£12 – £16 / hour</span>
+            </div>
+
+            <h3 class="job-title">Support Worker</h3>
+            <p class="job-role">Residential & Community Care</p>
+
+            <p class="job-description">
+              Compassionate professionals supporting daily living and independence.
+            </p>
+
+            <a href="{{ route('contact') }}" class="job-cta">
+              Enquire
+            </a>
           </div>
-
-          <h3 class="job-title">Healthcare Coordinator</h3>
-          <p class="job-role">Staffing & Care Coordination</p>
-
-          <ul class="job-details">
-            <li><strong>Work Site:</strong> Remote</li>
-            <li><strong>Shift:</strong> Office Hours</li>
-            <li><strong>Contract:</strong> Permanent</li>
-            <li><strong>Location:</strong> Remote (UK)</li>
-          </ul>
-
-          <p class="job-description">
-            Coordinate healthcare staffing placements, liaise with care providers,
-            and ensure smooth scheduling of healthcare professionals across sites.
-          </p>
-
-          <a href="#" class="job-cta">Apply for this role</a>
         </div>
-      </div>
 
-      <!-- Job Card -->
-      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
-        <div class="job-card">
-          <div class="job-header">
-            <span class="job-badge onsite">On-site</span>
-            <span class="job-salary">£45 – £70 / hour</span>
-          </div>
-
-          <h3 class="job-title">Locum Doctor</h3>
-          <p class="job-role">Clinical Services</p>
-
-          <ul class="job-details">
-            <li><strong>Work Site:</strong> On-site</li>
-            <li><strong>Shift:</strong> Locum / Short-term</li>
-            <li><strong>Contract:</strong> Temporary</li>
-            <li><strong>Location:</strong> Hospitals & Clinics</li>
-          </ul>
-
-          <p class="job-description">
-            Deliver high-quality medical assessment and treatment while collaborating
-            with multidisciplinary healthcare teams across clinical environments.
-          </p>
-
-          <a href="#" class="job-cta">Apply for this role</a>
-        </div>
-      </div>
+      @endforelse
 
     </div>
   </div>
 
 </section>
+
 
 <!-- Why Us Section -->
 <section id="why-us" class="why-us section">
@@ -843,8 +893,8 @@ Tobest Health care
           </div>
 
           <div class="cta-buttons mt-4">
-            <a href="#" class="btn btn-primary me-3">Learn More About Us</a>
-            <a href="#" class="btn btn-outline-primary">Request Staffing Support</a>
+            <a href="/about" class="btn btn-primary me-3">Learn More About Us</a>
+            <a href="/contact" class="btn btn-outline-primary">Request Staffing Support</a>
           </div>
         </div>
       </div>
@@ -914,7 +964,7 @@ Tobest Health care
                 "ToBest Health Care Solutions provided compassionate and reliable caregivers when our family needed support the most. Their professionalism gave us peace of mind."
               </p>
               <div class="testimonial-author d-flex align-items-center mt-3">
-                <img src="assets/img/person/person-f-3.webp" alt="Client" class="author-image me-3">
+                <img src="{{ asset('fe/assets/img/person/person-f-3.webp')}}" alt="Client" class="author-image me-3">
                 <div>
                   <h6>Client Testimonial</h6>
                   <span>Family Care Support</span>
@@ -946,8 +996,8 @@ Tobest Health care
           </p>
 
           <div class="cta-buttons">
-            <a href="#" class="btn btn-primary">Get in Touch</a>
-            <a href="#" class="btn btn-outline">Request a Consultation</a>
+            <a href="/contact" class="btn btn-primary">Get in Touch</a>
+            <a href="/contact" class="btn btn-outline">Request a Consultation</a>
           </div>
 
           <div class="cta-features">
