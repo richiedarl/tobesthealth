@@ -76,18 +76,13 @@
                     </select>
                 </div>
 
-                {{-- Location --}}
-                <div class="col-lg-3 col-md-4">
-                    <label class="form-label small text-muted">Location</label>
-                    <select name="location" class="form-select form-select-lg">
-                        <option value="">All Locations</option>
-                        @foreach ($locations as $location)
-                            <option value="{{ $location }}" @selected(request('location') === $location)>
-                                {{ $location }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+
+{{-- Location --}}
+<div class="search-field">
+    <label class="field-label">Location</label>
+    <input type="text" id="location-input" name="location" placeholder="Type a location..." value="{{ request('location') }}" autocomplete="off" class="form-control">
+    <div id="location-suggestions" class="autocomplete-suggestions"></div>
+</div>
 
                 {{-- Salary --}}
                 <div class="col-lg-3 col-md-4">

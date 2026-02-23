@@ -2,59 +2,169 @@
 <html lang="en">
 
 <head>
+  <!-- ================== CORE META ================== -->
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tobest Health care</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
-  <!-- Favicons -->
-  <link href="{{ asset('logo.png') }}" rel="icon">
-  <link href="{{ asset('logo.png') }}" rel="apple-touch-icon">
+  <!-- ЁЯЪл DISABLE DARK MODE GLOBALLY -->
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <!-- ================== FAVICONS ================== -->
+  <link rel="icon" href="{{ asset('logo.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
 
-  <!-- Vendor CSS Files -->
-  <link href="{{ asset('fe/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ asset('fe/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ asset('fe/assets/vendor/aos/aos.css') }}" rel="stylesheet">
-  <link href="{{ asset('fe/assets/vendor/swiper/swiper-bundle.min.css') }}  " rel="stylesheet">
+  @stack('styles')
+  <!-- =============
+===== EARLY DARK MODE KILL (CRITICAL) ================== -->
+  <style id="dark-mode-kill">
+    html {
+      color-scheme: light !important;
+      -webkit-color-scheme: light !important;
+    }
 
-  <!-- Main CSS File -->
-  <link href="{{ asset('fe/assets/css/main.css') }}" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @media (prefers-color-scheme: dark) {
+      html, body {
+        -webkit-filter: none !important;
+        filter: none !important;
+        forced-color-adjust: none !important;
+      }
+    }
+  </style>
+
+  <!-- ================== SAMSUNG BROWSER REINFORCEMENT ================== -->
+  <script>
+    (function () {
+      var ua = navigator.userAgent || '';
+      if (ua.indexOf('SamsungBrowser') !== -1) {
+        document.documentElement.style.colorScheme = 'light';
+        document.documentElement.style.setProperty('-webkit-color-scheme', 'light');
+      }
+    })();
+  </script>
+
+  <!-- ================== FONTS ================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+
+  <!-- ================== VENDOR CSS ================== -->
+  <link rel="preload" href="{{ asset('fe/assets/vendor/bootstrap/css/bootstrap.min.css') }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('fe/assets/vendor/bootstrap/css/bootstrap.min.css') }}"></noscript>
+
+  <link rel="preload" href="{{ asset('fe/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('fe/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}"></noscript>
+
+  <link rel="preload" href="{{ asset('fe/assets/vendor/aos/aos.css') }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('fe/assets/vendor/aos/aos.css') }}"></noscript>
+
+  <link rel="preload" href="{{ asset('fe/assets/vendor/swiper/swiper-bundle.min.css') }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('fe/assets/vendor/swiper/swiper-bundle.min.css') }}"></noscript>
+
+  <!-- ================== MAIN CSS ================== -->
+  <link rel="preload"
+        href="{{ asset('fe/assets/css/main.css') }}?v={{ filemtime(public_path('fe/assets/css/main.css')) }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+          href="{{ asset('fe/assets/css/main.css') }}?v={{ filemtime(public_path('fe/assets/css/main.css')) }}">
+  </noscript>
+
+  <!-- ================== PLUGINS ================== -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+
+  <!-- Select2 -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <!-- =======================================================
-Tobest Health care
+  Tobest Health care
   ======================================================== -->
 </head>
 
 <body class="starter-page-page">
+    
+<div id="samsung-dark-warning" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:#ffcc00;
+    color:#000;
+    text-align:center;
+    padding:12px 10px;
+    font-family:Arial,sans-serif;
+    z-index:9999;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    transform: translateY(-100%);
+    transition: transform 0.4s ease;
+">
+    ⚠️ This website does not support your browser's enhanced dark mode. For the best experience, please turn off Samsung's system dark mode or switch to a different browser.
+    <button id="close-samsung-warning" style="
+        margin-left:10px;
+        background:#000;
+        color:#fff;
+        border:none;
+        padding:2px 8px;
+        border-radius:3px;
+        cursor:pointer;
+        font-size:12px;
+    ">Dismiss</button>
+</div>
 
- <header id="header" class="header d-flex align-items-center sticky-top">
+<script>
+/*
+ * Samsung Browser Forced Dark Mode Warning
+ * Samsung does NOT expose forced dark mode to JS
+ * So we warn unconditionally on Samsung Browser
+ */
+(function () {
+    var ua = navigator.userAgent || '';
+
+    // Detect Samsung Browser
+    if (ua.indexOf('SamsungBrowser') !== -1) {
+        var warning = document.getElementById('samsung-dark-warning');
+        if (!warning) return;
+
+        warning.style.display = 'block';
+
+        // Slide-down animation
+        setTimeout(function () {
+            warning.style.transform = 'translateY(0)';
+        }, 50);
+
+        // Dismiss button (temporary per page load)
+        var closeBtn = document.getElementById('close-samsung-warning');
+        closeBtn.addEventListener('click', function () {
+            warning.style.transform = 'translateY(-100%)';
+            setTimeout(function () {
+                warning.style.display = 'none';
+            }, 400);
+        });
+    }
+})();
+</script>
+
+
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="/" class="logo d-flex align-items-center">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-         <img src="{{ asset('logo.png') }}" alt="site logo">
-        {{-- <svg class="my-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g id="bgCarrier" stroke-width="0"></g>
-          <g id="tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-          <g id="iconCarrier">
-            <path d="M22 22L2 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M2 11L6.06296 7.74968M22 11L13.8741 4.49931C12.7784 3.62279 11.2216 3.62279 10.1259 4.49931L9.34398 5.12486" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M15.5 5.5V3.5C15.5 3.22386 15.7239 3 16 3H18.5C18.7761 3 19 3.22386 19 3.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M4 22V9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M20 9.5V13.5M20 22V17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M15 22V17C15 15.5858 15 14.8787 14.5607 14.4393C14.1213 14 13.4142 14 12 14C10.5858 14 9.87868 14 9.43934 14.4393M9 22V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path d="M14 9.5C14 10.6046 13.1046 11.5 12 11.5C10.8954 11.5 10 10.6046 10 9.5C10 8.39543 10.8954 7.5 12 7.5C13.1046 7.5 14 8.39543 14 9.5Z" stroke="currentColor" stroke-width="1.5"></path>
-          </g>
-        </svg> --}}
-        {{-- <h1 class="sitename">ToBestHealthcare</h1> --}}
-      </a>
+      <a href="/" class="logo d-flex align-items-center logo-wrapper">
+    <img src="{{ asset('logo.png') }}" alt="site logo" class="logo-img">
+</a>
+
 
       <nav id="navmenu" class="navmenu">
         <ul>
@@ -64,6 +174,16 @@ Tobest Health care
           <li><a href="/services">Services</a></li>
         
           <li><a href="/contact">Contact</a></li>
+                    <li class="dropdown"><a href="#"><span>Register</span>
+                       <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="{{ route('register.nurse') }}">Nurses</a></li>
+              <li><a href="{{ route('register.hca') }}">Healthworkers</a></li>
+
+            </ul>
+          </li>
+          
+
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -73,6 +193,18 @@ Tobest Health care
 
 
   <main class="main">
+@if ($errors->any())
+    <div class="container mt-3">
+        <div class="alert alert-danger">
+            <strong>Please fix the following errors:</strong>
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+@endif
 
     <!-- Page Title -->
 @yield('content')  
@@ -107,9 +239,9 @@ Tobest Health care
   <div class="container footer-top">
     <div class="row gy-4">
       <div class="col-lg-5 col-md-12 footer-about">
-        <a href="/" class="logo d-flex align-items-center">
-          <span class="sitename">ToBest Health Care Solutions</span>
-        </a>
+         <a href="/" class="logo d-flex align-items-center logo-wrapper">
+    <img src="{{ asset('logo.png') }}" alt="site logo" class="logo-img">
+</a>
         <p>
           ToBest Health Care Solutions is committed to providing compassionate, reliable, and professional healthcare staffing and support services tailored to individuals, families, and healthcare providers.
         </p>
@@ -144,23 +276,42 @@ Tobest Health care
       </div>
 
       <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-        <h4>Contact Us</h4>
-        <p>ToBest Health Care Solutions</p>
-        <p>Abuja, Nigeria</p>
-        <p class="mt-4">
-          <strong>Phone:</strong> <span>03301331162</span>
-        </p>
-        <p>
-          <strong>Email:</strong> <span>info@tobesthealthcaresolutions.com</span>
-        </p>
-      </div>
+  <h4>Contact Us</h4>
+
+  <p><strong>ToBest Health Care Solutions</strong></p>
+
+  <p>
+    <strong>UK HQ:</strong><br>
+    45-47 Norman Street,<br>
+    Huddersfield,<br>
+    HD2 2UE,<br>
+    United Kingdom
+  </p>
+
+  <p class="mt-3">
+    <strong>Nigeria (Aba Branch):</strong><br>
+    Aba, Abia State,<br>
+    Nigeria
+  </p>
+
+  <p class="mt-4">
+    <strong>Phone:</strong><br>
+    <span>0330 133 1162</span>
+  </p>
+
+  <p>
+    <strong>Email:</strong><br>
+    <span>info@tobesthealthcaresolutions.co.uk</span>
+  </p>
+</div>
+
 
     </div>
   </div>
 
   <div class="container copyright text-center mt-4">
     <p>
-      © <span>Copyright</span>
+      ┬й <span>Copyright</span>
       <strong class="px-1 sitename">ToBest Health Care Solutions</strong>
       <span>All Rights Reserved</span>
     </p>
@@ -176,6 +327,23 @@ Tobest Health care
   <!-- Preloader -->
   <div id="preloader"></div>
 
+<script>
+/* ЁЯЫбя╕П Final Samsung Browser safety net */
+document.documentElement.style.setProperty('color-scheme', 'light');
+document.documentElement.style.setProperty('-webkit-color-scheme', 'light');
+</script>
+
+<script>
+$(document).ready(function() {
+    $('.select2').select2({
+        placeholder: "Any",
+        allowClear: true,
+        width: 'resolve'
+    });
+});
+</script>
+
+@stack('scripts')
   <!-- Vendor JS Files -->
   <script src="{{ asset('fe/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
   <script src="{{ asset('fe/assets/vendor/php-email-form/validate.js')}}"></script>

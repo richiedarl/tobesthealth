@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Staff;
+use App\Models\HcaDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Offer;
@@ -13,11 +14,31 @@ use App\Models\CareSetting;
 class AdminStaffController extends Controller
 {
     public function index()
-    {
-        $staff = Staff::latest()->paginate(20);
-        return view('admin.staff.index', compact('staff'));
-    }
+{
+    $staff = Staff::with('hcaDetails')->latest()->paginate(20);
+    return view('admin.staff.index', compact('staff'));
+}
 
+public function show(Staff $staff)
+{
+    // Load hcaDetails relationship
+    $staff->load('hcaDetails');
+    return view('admin.staff.show', compact('staff'));
+}    
+public function toggleStatus(Request $request, $id)
+{
+    $staff = Staff::findOrFail($id);
+    $field = $request->input('field');
+    
+    if (in_array($field, ['is_available', 'is_active'])) {
+        $staff->$field = !$staff->$field;
+        $staff->save();
+        
+        return back()->with('success', 'Staff status updated successfully.');
+    }
+    
+    return back()->with('error', 'Invalid status field.');
+}
     public function create()
     {
         return view('admin.staff.create', [

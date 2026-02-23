@@ -14,28 +14,40 @@ class IndexController extends Controller
 {
   public function index()
 {
+    // Get unique locations from existing offers
+    $offerLocations = Offer::whereNotNull('location')
+                           ->where('location', '!=', '')
+                           ->distinct()
+                           ->orderBy('location')
+                           ->pluck('location')
+                           ->toArray();
+
+    // Get full UK city list from config
+    $ukCities = config('uk_cities.cities');
+
+    // Merge and remove duplicates
+    $locations = array_unique(array_merge($ukCities, $offerLocations));
+    sort($locations); // Optional: sort alphabetically
+
     return view('index', [
         // Existing data
         'roles'        => Role::orderBy('name')->get(),
         'serviceTypes' => ServiceType::orderBy('name')->get(),
         'careSettings' => CareSetting::orderBy('name')->get(),
-        'locations'    => Offer::whereNotNull('location')
-                                ->where('location', '!=', '')
-                                ->distinct()
-                                ->orderBy('location')
-                                ->pluck('location'),
+        'locations'    => $locations,
 
         // Staff snippets
         'featuredStaff' => Staff::active()
-                                ->featured()
-                                ->inRandomOrder()
-                                ->first(),
+                        ->featured()
+                        ->inRandomOrder()
+                        ->limit(4)
+                        ->get(),
+
         // Offer snippets
-       'featuredOffers' => Offer::where('is_active', true)
+        'featuredOffers' => Offer::where('is_active', true)
                                 ->inRandomOrder()
                                 ->limit(4)
-                                  ->get(),
-
+                                ->get(),
 
         'availableStaffs' => Staff::active()
                                   ->available()
@@ -43,7 +55,6 @@ class IndexController extends Controller
                                   ->limit(3)
                                   ->get(),
 
-        // Offer snippets
         'latestOffers' => Offer::where('is_active', true)
                                 ->inRandomOrder()
                                 ->limit(3)

@@ -37,18 +37,13 @@
                     >
                 </div>
 
-                {{-- Location --}}
-                <div class="form-group">
-                    <label for="location">Location</label>
-                    <input
-                        type="text"
-                        name="location"
-                        id="location"
-                        class="form-control"
-                        value="{{ old('location') }}"
-                        required
-                    >
-                </div>
+                <div class="search-field">
+    <label class="field-label">Location</label>
+    <input type="text" id="location-input" name="location" placeholder="Type a location..." value="{{ request('location') }}" autocomplete="off" class="form-control">
+    <div id="location-suggestions" class="autocomplete-suggestions"></div>
+</div>
+
+
 
                 {{-- Role --}}
                 <div class="form-group">

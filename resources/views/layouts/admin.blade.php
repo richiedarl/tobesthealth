@@ -19,6 +19,19 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('admin/css/sb-admin-2.css') }}" rel="stylesheet">
+    {{-- Add this to the <head> section --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
 
@@ -109,6 +122,17 @@
     });
 </script>
 @endif
+<script>
+$(document).ready(function() {
+    $('.select2').select2({
+        placeholder: "Any",
+        allowClear: true,
+        width: 'resolve'
+    });
+});
+</script>
+
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('admin/vendor/jquery/jquery.min.js')}}"></script>

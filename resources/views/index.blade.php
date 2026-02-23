@@ -2,58 +2,238 @@
 <html lang="en">
 
 <head>
+  <!-- ================== CORE META ================== -->
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Index - Tobest Health care</title>
   <meta name="description" content="TobestHealthcare exists for job recruitment">
   <meta name="keywords" content="">
 
-  <!-- Favicons -->
-  <link href="{{ asset('logo.png')}}" rel="icon">
-  <link href="{{ asset('logo.png')}}" rel="apple-touch-icon">
+  <!-- 🚫 HARD DISABLE DARK MODE (ALL BROWSERS) -->
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <!-- ================== FAVICONS ================== -->
+  <link rel="icon" href="{{ asset('logo.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
 
-  <!-- Vendor CSS Files -->
-  <link href="{{ asset('fe/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-  <link href="{{ asset('fe/assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
-  <link href="{{ asset('fe/assets/vendor/aos/aos.css')}}" rel="stylesheet">
-  <link href="{{ asset('fe/assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
+  <!-- ================== EARLY DARK-MODE KILL (CRITICAL) ================== -->
+  <style id="dark-mode-kill">
+    html {
+      color-scheme: light !important;
+      -webkit-color-scheme: light !important;
+    }
 
-  <!-- Main CSS File -->
-  <link href="{{ asset('fe/assets/css/main.css')}}" rel="stylesheet">
+    @media (prefers-color-scheme: dark) {
+      html, body {
+        -webkit-filter: none !important;
+        filter: none !important;
+        forced-color-adjust: none !important;
+      }
+    }
+  </style>
+
+  <!-- ================== SAMSUNG BROWSER DETECTION ================== -->
+  <script>
+    (function () {
+      var ua = navigator.userAgent || '';
+      if (ua.indexOf('SamsungBrowser') !== -1) {
+        document.documentElement.style.colorScheme = 'light';
+        document.documentElement.style.setProperty('-webkit-color-scheme', 'light');
+      }
+    })();
+  </script>
+
+  <!-- ================== FONTS ================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+
+  <!-- ================== VENDOR CSS (CACHE-SAFE) ================== -->
+  <link rel="preload"
+        href="{{ asset('fe/assets/vendor/bootstrap/css/bootstrap.min.css') }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('fe/assets/vendor/bootstrap/css/bootstrap.min.css') }}"></noscript>
+
+  <link rel="preload"
+        href="{{ asset('fe/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('fe/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}"></noscript>
+
+  <link rel="preload"
+        href="{{ asset('fe/assets/vendor/aos/aos.css') }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('fe/assets/vendor/aos/aos.css') }}"></noscript>
+
+  <link rel="preload"
+        href="{{ asset('fe/assets/vendor/swiper/swiper-bundle.min.css') }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ asset('fe/assets/vendor/swiper/swiper-bundle.min.css') }}"></noscript>
+
+  <!-- ================== MAIN CSS (CACHE-BUSTED) ================== -->
+  <link rel="preload"
+        href="{{ asset('fe/assets/css/main.css') }}?v={{ filemtime(public_path('fe/assets/css/main.css')) }}"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+          href="{{ asset('fe/assets/css/main.css') }}?v={{ filemtime(public_path('fe/assets/css/main.css')) }}">
+  </noscript>
+
+  <!-- ================== JS DEPENDENCIES ================== -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('.select2').select2({
+        placeholder: "Any",
+        tags: true,
+        tokenSeparators: [','],
+        width: 'resolve',
+        allowClear: true
+      });
+    });
+  </script>
 
   <!-- =======================================================
-Tobest Health care
+  Tobest Health care
   ======================================================== -->
 </head>
 
-<body class="index-page">
+<style>
+.autocomplete-suggestions {
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    background: #fff;
+    z-index: 9999;
+    width: 100%;
+}
+.autocomplete-suggestion {
+    padding: 8px;
+    cursor: pointer;
+}
+.autocomplete-suggestion:hover {
+    background-color: #f0f0f0;
+}
+</style>
 
-  <header id="header" class="header d-flex align-items-center sticky-top">
+<body class="index-page">
+    <!-- Samsung Dark Mode Warning -->
+<div id="samsung-dark-warning" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:#ffcc00;
+    color:#000;
+    text-align:center;
+    padding:12px 10px;
+    font-family:Arial,sans-serif;
+    z-index:9999;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    transform: translateY(-100%);
+    transition: transform 0.4s ease;
+">
+    ⚠️ This website does not support your browser's enhanced dark mode. For the best experience, please turn off Samsung's system dark mode or switch to a different browser.
+    <button id="close-samsung-warning" style="
+        margin-left:10px;
+        background:#000;
+        color:#fff;
+        border:none;
+        padding:2px 8px;
+        border-radius:3px;
+        cursor:pointer;
+        font-size:12px;
+    ">Dismiss</button>
+</div>
+<script>
+/*
+ * Samsung Browser Forced Dark Mode Warning
+ * Samsung does NOT expose forced dark mode to JS
+ * So we warn unconditionally on Samsung Browser
+ */
+(function () {
+    var ua = navigator.userAgent || '';
+
+    // Detect Samsung Browser
+    if (ua.indexOf('SamsungBrowser') !== -1) {
+        var warning = document.getElementById('samsung-dark-warning');
+        if (!warning) return;
+
+        warning.style.display = 'block';
+
+        // Slide-down animation
+        setTimeout(function () {
+            warning.style.transform = 'translateY(0)';
+        }, 50);
+
+        // Dismiss button (temporary per page load)
+        var closeBtn = document.getElementById('close-samsung-warning');
+        closeBtn.addEventListener('click', function () {
+            warning.style.transform = 'translateY(-100%)';
+            setTimeout(function () {
+                warning.style.display = 'none';
+            }, 400);
+        });
+    }
+})();
+</script>
+
+<script>
+/*
+ * Forced Dark Mode Warning
+ * Shows every visit if dark mode is active
+ * Best placed immediately after <body>
+ */
+(function () {
+    var ua = navigator.userAgent || '';
+    var isSamsung = ua.indexOf('SamsungBrowser') !== -1;
+
+    // Detect system/browser dark mode
+    var darkModeActive =
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Show warning if:
+    // 1. Dark mode is active
+    // 2. Browser is Samsung OR clearly forcing dark mode
+    if (darkModeActive && isSamsung) {
+        var warning = document.getElementById('samsung-dark-warning');
+        if (!warning) return;
+
+        warning.style.display = 'block';
+
+        // Slide-down animation
+        setTimeout(function () {
+            warning.style.transform = 'translateY(0)';
+        }, 50);
+
+        // Dismiss button (temporary only)
+        var closeBtn = document.getElementById('close-samsung-warning');
+        closeBtn.addEventListener('click', function () {
+            warning.style.transform = 'translateY(-100%)';
+            setTimeout(function () {
+                warning.style.display = 'none';
+            }, 400);
+        });
+    }
+})();
+</script>
+
+
+
+
+    <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="/" class="logo d-flex align-items-center">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-         <img src="{{ asset('logo.png') }}" alt="site logo">
-        {{-- <svg class="my-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g id="bgCarrier" stroke-width="0"></g>
-          <g id="tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-          <g id="iconCarrier">
-            <path d="M22 22L2 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M2 11L6.06296 7.74968M22 11L13.8741 4.49931C12.7784 3.62279 11.2216 3.62279 10.1259 4.49931L9.34398 5.12486" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M15.5 5.5V3.5C15.5 3.22386 15.7239 3 16 3H18.5C18.7761 3 19 3.22386 19 3.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M4 22V9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M20 9.5V13.5M20 22V17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-            <path d="M15 22V17C15 15.5858 15 14.8787 14.5607 14.4393C14.1213 14 13.4142 14 12 14C10.5858 14 9.87868 14 9.43934 14.4393M9 22V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path d="M14 9.5C14 10.6046 13.1046 11.5 12 11.5C10.8954 11.5 10 10.6046 10 9.5C10 8.39543 10.8954 7.5 12 7.5C13.1046 7.5 14 8.39543 14 9.5Z" stroke="currentColor" stroke-width="1.5"></path>
-          </g>
-        </svg> --}}
-        {{-- <h1 class="sitename">ToBestHealthcare</h1> --}}
-      </a>
+      <a href="/" class="logo d-flex align-items-center logo-wrapper">
+    <img src="{{ asset('logo.png') }}" alt="site logo" class="logo-img">
+</a>
+
 
       <nav id="navmenu" class="navmenu">
         <ul>
@@ -63,6 +243,16 @@ Tobest Health care
           <li><a href="/services">Services</a></li>
         
           <li><a href="/contact">Contact</a></li>
+                    <li class="dropdown"><a href="#"><span>Register</span>
+                       <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="{{ route('register.nurse') }}">Nurses</a></li>
+              <li><a href="{{ route('register.hca') }}">Healthworkers</a></li>
+
+            </ul>
+          </li>
+          
+
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -72,35 +262,87 @@ Tobest Health care
 
   <main class="main">
 
- <!-- Hero Section -->
-<section id="hero" class="hero section">
 
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
+<!-- Hero Section -->
+<section id="hero" class="hero section py-5">
+  <div class="container">
+    <div class="row align-items-center g-5">
 
-    <div class="hero-wrapper">
-      <div class="row g-4">
+      <!-- LEFT: Content (STATIC) -->
+      <div class="col-lg-6" data-aos="fade-up">
+        <span class="hero-label mb-3 d-inline-block">
+          <i class="bi bi-house-heart"></i> Trusted Care Staffing
+        </span>
 
-        <div class="col-lg-7">
-          <div class="hero-content" data-aos="zoom-in" data-aos-delay="200">
-            <div class="content-header">
-              <span class="hero-label">
-                <i class="bi bi-house-heart"></i>
-                Trusted Care Staffing
-              </span>
-              <h1>Reliable Healthcare Professionals When You Need Them Most</h1>
-              <p>
-                Tobest Healthcare Solutions connects care homes, hospitals, and private clients with compassionate,
-                fully vetted healthcare professionals. Nurse-led recruitment you can trust.
-              </p>
+        <h1 class="fw-bold display-6 mb-3">
+          Reliable Healthcare Professionals<br>
+          When You Need Them Most
+        </h1>
+
+        <p class="lead text-muted mb-4">
+          Tobest Healthcare Solutions connects care homes, hospitals, and private clients with
+          compassionate, fully vetted healthcare professionals.
+        </p>
+
+        <div class="d-flex gap-4 mt-4">
+          <div>
+            <h3 class="fw-bold mb-0">250+</h3>
+            <small class="text-muted">Healthcare Professionals</small>
+          </div>
+          <div>
+            <h3 class="fw-bold mb-0">40+</h3>
+            <small class="text-muted">Care Partners</small>
+          </div>
+          <div>
+            <h3 class="fw-bold mb-0">98%</h3>
+            <small class="text-muted">Client Satisfaction</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: IMAGE SLIDER (ONLY IMAGES) -->
+      <div class="col-lg-6" data-aos="fade-left">
+        <div id="heroImageCarousel" class="carousel slide" data-bs-ride="carousel">
+
+          <div class="carousel-inner rounded-4 shadow-sm overflow-hidden">
+
+            <div class="carousel-item active">
+              <img src="{{ asset('fe/assets/img/healthcare/image1.jpg') }}"
+                   class="d-block w-100 hero-img"
+                   alt="Healthcare Staffing">
             </div>
 
-            <div class="search-container" data-aos="fade-up" data-aos-delay="300">
-  <div class="search-header">
-    <h3>Hire Staff or Find Care Jobs</h3>
-    <p>Whether you are a care provider or a healthcare professional, we are here to help</p>
-  </div>
+            <div class="carousel-item">
+              <img src="{{ asset('fe/assets/img/healthcare/imagelaptop.jpg') }}"
+                   class="d-block w-100 hero-img"
+                   alt="Care Environment">
+            </div>
 
-  <form method="GET" action="{{ route('user.jobs.index') }}" class="property-search-form">
+            <div class="carousel-item">
+              <img src="{{ asset('fe/assets/img/healthcare/images.jpg') }}"
+                   class="d-block w-100 hero-img"
+                   alt="Professional Care">
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="search-section py-5 bg-light">
+  <div class="container">
+    <div class="search-container job-search">
+
+      <div class="search-header text-center mb-4">
+        <h3>Hire Staff or Find Care Jobs</h3>
+        <p>Whether you are a care provider or a healthcare professional, we are here to help</p>
+      </div>
+<form method="GET" action="{{ route('user.jobs.index') }}" class="property-search-form">
 
   <div class="search-grid">
 
@@ -114,16 +356,12 @@ Tobest Health care
       </select>
     </div>
 
-    {{-- Location --}}
-    <div class="search-field">
-      <label class="field-label">Location</label>
-      <select name="location">
-        <option value="">Any</option>
-        @foreach($locations as $location)
-          <option value="{{ $location }}">{{ $location }}</option>
-        @endforeach
-      </select>
-    </div>
+<div class="search-field">
+    <label class="field-label">Location</label>
+    <input type="text" id="location-input" name="location" placeholder="Type a location..." value="{{ request('location') }}" autocomplete="off" class="form-control">
+    <div id="location-suggestions" class="autocomplete-suggestions"></div>
+</div>
+
 
     {{-- Role --}}
     <div class="search-field">
@@ -166,108 +404,11 @@ Tobest Health care
   </button>
 
 </form>
-
-
-</div>
-
-
-            <div class="achievement-grid" data-aos="fade-up" data-aos-delay="400">
-              <div class="achievement-item">
-                <div class="achievement-number">
-                  <span data-purecounter-start="0" data-purecounter-end="250" data-purecounter-duration="1" class="purecounter"></span>+
-                </div>
-                <span class="achievement-text">Healthcare Professionals</span>
-              </div>
-              <div class="achievement-item">
-                <div class="achievement-number">
-                  <span data-purecounter-start="0" data-purecounter-end="40" data-purecounter-duration="1" class="purecounter"></span>+
-                </div>
-                <span class="achievement-text">Care Partners</span>
-              </div>
-              <div class="achievement-item">
-                <div class="achievement-number">
-                  <span data-purecounter-start="0" data-purecounter-end="98" data-purecounter-duration="1" class="purecounter"></span>%
-                </div>
-                <span class="achievement-text">Client Satisfaction</span>
-              </div>
-            </div>
-          </div>
-        </div><!-- End Hero Content -->
-
-        <div class="col-lg-5">
-          <div class="hero-visual" data-aos="fade-left" data-aos-delay="400">
-            <div class="visual-container">
-              <div class="featured-property">
-                <img src="{{ asset('fe/assets/img/healthcare/image1.jpg') }}" alt="Healthcare Staffing" class="img-fluid">
-                <div class="property-info">
-                  <div class="property-price">24/7 Staff Availability</div>
-                  <div class="property-details">
-                    <span><i class="bi bi-geo-alt"></i> Nationwide Coverage</span>
-                    <span><i class="bi bi-house"></i> Hospitals & Care Homes</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="overlay-images">
-                <div class="overlay-img overlay-1">
-                  <img src="{{ asset('fe/assets/img/healthcare/imagelaptop.jpg') }}" alt="Care Environment" class="img-fluid">
-                </div>
-                <div class="overlay-img overlay-2">
-                  <img src="{{ asset('fe/assets/img/healthcare/images.jpg') }}" alt="Professional Care" class="img-fluid">
-                </div>
-              </div>
-
-             <div class="agent-card">
-    <div class="agent-profile">
-
-        <img
-            src="{{ isset($featuredStaff) && $featuredStaff && $featuredStaff->photo
-                    ? asset('storage/'.$featuredStaff->photo)
-                    : asset('fe/assets/img/healthcare/agent-7.webp') }}"
-            alt="Care Consultant"
-            class="agent-photo"
-        >
-
-        <div class="agent-info">
-            <h4>
-                {{ $featuredStaff->full_name ?? 'Senior Care Consultant' }}
-            </h4>
-
-            <p>
-                {{ $featuredStaff->role ?? 'Nurse-Led Recruitment' }}
-            </p>
-
-            <div class="agent-rating">
-                <div class="stars">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </div>
-
-                <span class="rating-text">
-                    {{ $featuredStaff ? 'Available for Placement' : 'Trusted by Care Providers' }}
-                </span>
-            </div>
-        </div>
-    </div>
-
-    {{-- <button class="contact-agent-btn">
-        <i class="bi bi-chat-dots"></i>
-    </button> --}}
-</div>
-
-            </div>
-          </div>
-        </div><!-- End Hero Visual -->
-
-      </div>
     </div>
 
   </div>
+</section>
 
-</section><!-- /Hero Section -->
 
 <!-- Home About Section -->
 <section id="home-about" class="home-about section">
@@ -361,7 +502,6 @@ Tobest Health care
 
 
 
-<!-- Featured Services Section -->
 <section id="featured-services" class="featured-services section">
 
   <div class="container section-title" data-aos="fade-up">
@@ -370,365 +510,136 @@ Tobest Health care
   </div>
 
   <div class="container" data-aos="fade-up" data-aos-delay="100">
-
     <div class="row g-4">
 
+      {{-- Care & Support --}}
       <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
-        <div class="service-card">
-          <div class="service-icon">
-            <i class="bi bi-person-check"></i>
+        <div class="service-card icon-card">
+          <div class="service-icon-xl bg-primary-soft">
+            <i class="bi bi-people-fill"></i>
           </div>
+
           <div class="service-info">
-            <h3><a href="#">Care & Support Staffing</a></h3>
-            <p>Reliable care assistants and support workers carefully matched to your care environment.</p>
+            <h3>Care & Support Staffing</h3>
+            <p>
+              Reliable care assistants and support workers carefully matched to your care environment.
+            </p>
+
             <ul class="service-highlights">
               <li><i class="bi bi-check-circle-fill"></i> Fully Vetted Staff</li>
               <li><i class="bi bi-check-circle-fill"></i> Flexible Cover</li>
               <li><i class="bi bi-check-circle-fill"></i> Person-Centred Care</li>
             </ul>
+
             <a href="/services" class="service-link">
               <span>Learn More</span>
               <i class="bi bi-arrow-up-right"></i>
             </a>
           </div>
-          <div class="service-visual">
-            <img src="{{ asset('fe/assets/img/healthcare/care-staffing.jpg') }}" class="img-fluid" alt="Care Staffing" loading="lazy">
-          </div>
         </div>
       </div>
 
+      {{-- Nursing --}}
       <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
-        <div class="service-card">
-          <div class="service-icon">
+        <div class="service-card icon-card">
+          <div class="service-icon-xl bg-danger-soft">
             <i class="bi bi-heart-pulse-fill"></i>
           </div>
+
           <div class="service-info">
-            <h3><a href="#">Nursing & Clinical Cover</a></h3>
-            <p>Experienced nurses and doctors providing safe, compliant, and professional clinical support.</p>
+            <h3>Nursing & Clinical Cover</h3>
+            <p>
+              Experienced nurses and clinicians providing safe, compliant clinical support.
+            </p>
+
             <ul class="service-highlights">
               <li><i class="bi bi-check-circle-fill"></i> Registered Professionals</li>
               <li><i class="bi bi-check-circle-fill"></i> Emergency & Long-Term Cover</li>
               <li><i class="bi bi-check-circle-fill"></i> Nurse-Led Oversight</li>
             </ul>
+
             <a href="/services" class="service-link">
               <span>Learn More</span>
               <i class="bi bi-arrow-up-right"></i>
             </a>
           </div>
-          <div class="service-visual">
-            <img src="{{ asset('fe/assets/img/healthcare/hospital-team.jpg') }}" class="img-fluid" alt="Nursing Services" loading="lazy">
-          </div>
         </div>
       </div>
 
     </div>
 
-    <div class="text-center" data-aos="zoom-in" data-aos-delay="600">
-      <a href="/services" class="btn-view-all">
-        <span>View All Services</span>
-        <i class="bi bi-arrow-right"></i>
+    <div class="text-center mt-5" data-aos="zoom-in" data-aos-delay="600">
+      <a href="/services" class="btn btn-primary px-4 py-2 rounded-pill">
+        View All Services <i class="bi bi-arrow-right ms-1"></i>
       </a>
     </div>
-
   </div>
 
 </section>
 
-    <!-- Featured Services Section -->
-    <!-- Featured Staffing Section -->
-<section id="featured-properties" class="featured-properties section">
+@if($featuredStaff->count() > 0)
+<section id="featured-agents" class="featured-agents section">
 
-  <div class="container section-title" data-aos="fade-up">
-    <h2>Featured Care Solutions</h2>
-    <p>Reliable, compassionate healthcare professionals matched to the right care environments</p>
-  </div>
-
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
-    <div class="row gy-5">
-
-      {{-- MAIN FEATURED STAFF --}}
-      <div class="col-lg-8">
-        <div class="featured-property-main" data-aos="zoom-in" data-aos-delay="200">
-
-          <div class="property-hero">
-            <img
-              src="{{ $featuredStaff && $featuredStaff->photo
-                    ? asset('storage/'.$featuredStaff->photo)
-                    : asset('fe/assets/img/healthcare/agent-1.webp') }}"
-              class="img-fluid"
-              alt="Healthcare Staffing"
-            >
-
-            <div class="property-overlay">
-              <div class="property-badge-main premium">
-                {{ $featuredStaff ? 'Available Staff' : 'Nurse-Led' }}
-              </div>
-
-              <div class="property-stats">
-                <div class="stat-item">
-                  <i class="bi bi-heart-pulse"></i>
-                  <span>Qualified Staff</span>
-                </div>
-                <div class="stat-item">
-                  <i class="bi bi-clock-fill"></i>
-                  <span>24/7 Coverage</span>
-                </div>
-                <div class="stat-item">
-                  <i class="bi bi-shield-check"></i>
-                  <span>Fully Vetted</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="property-hero-content">
-            <div class="property-header">
-              <div class="property-info">
-                <h2>
-                  <a href="#">
-                    {{ $featuredStaff->full_name ?? 'Comprehensive Healthcare Staffing' }}
-                  </a>
-                </h2>
-
-                <div class="property-address">
-                  <i class="bi bi-geo-alt-fill"></i>
-                  <span>
-                    {{ $featuredStaff->care_specialty ?? 'Care Homes, Hospitals & Home Care' }}
-                  </span>
-                </div>
-              </div>
-
-              <div class="property-price-main">
-                {{ $featuredStaff ? 'Available Now' : 'UK-Wide' }}
-              </div>
-            </div>
-
-            <p class="property-description">
-              {{ $featuredStaff->bio
-                  ?? 'Nurse-led recruitment delivering dependable care assistants, nurses, and doctors to support safe, dignified, and high-quality care across all settings.' }}
-            </p>
-
-            <div class="property-actions-main">
-              <a
-                href="{{ $featuredStaff
-                        ? route('staff.apply', $featuredStaff)
-                        : route('contact') }}"
-                class="btn-primary-custom"
-              >
-                {{ $featuredStaff ? 'Apply for Staff' : 'Request Staff' }}
-              </a>
-
-              <a href="{{ route('services') }}" class="btn-outline-custom">
-                Our Services
-              </a>
-
-              <div class="property-listing-info">
-                <span class="listing-status for-sale">Available Now</span>
-                <span class="listing-date">Fast Placement</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      {{-- SIDEBAR STAFF --}}
-      <div class="col-lg-4">
-        <div class="properties-sidebar">
-
-          @forelse($sideStaffs as $staff)
-            <div class="sidebar-property-card" data-aos="fade-left">
-
-              <div class="sidebar-property-image">
-                <img
-                  src="{{ $staff->photo
-                        ? asset('storage/'.$staff->photo)
-                        : asset('fe/assets/img/healthcare/support-staff.jpg') }}"
-                  class="img-fluid"
-                >
-                <div class="sidebar-property-badge hot">Available</div>
-              </div>
-
-              <div class="sidebar-property-content">
-                <h4>
-                  <a href="{{ route('staff.apply', $staff) }}">
-                    {{ $staff->full_name }}
-                  </a>
-                </h4>
-
-                <div class="sidebar-location">
-                  <i class="bi bi-hospital"></i>
-                  <span>{{ $staff->care_specialty ?? 'Healthcare Support' }}</span>
-                </div>
-
-                <div class="sidebar-specs">
-                  <span><i class="bi bi-check2-circle"></i> Trained</span>
-                  <span><i class="bi bi-check2-circle"></i> Verified</span>
-                  <span><i class="bi bi-check2-circle"></i> Reliable</span>
-                </div>
-
-                <div class="sidebar-price-row">
-                  <div class="sidebar-price">Flexible Cover</div>
-                  <a href="{{ route('staff.apply', $staff) }}" class="sidebar-btn">
-                    Enquire
-                  </a>
-                </div>
-              </div>
-
-            </div>
-          @empty
-            {{-- FALLBACK CARD --}}
-            <div class="sidebar-property-card">
-              <div class="sidebar-property-image">
-                <img src="{{ asset('fe/assets/img/healthcare/support-staff.jpg') }}" class="img-fluid">
-                <div class="sidebar-property-badge hot">In Demand</div>
-              </div>
-
-              <div class="sidebar-property-content">
-                <h4>Care Assistants & Support Workers</h4>
-                <div class="sidebar-location">
-                  <i class="bi bi-hospital"></i>
-                  <span>Residential & Home Care</span>
-                </div>
-
-                <div class="sidebar-specs">
-                  <span><i class="bi bi-check2-circle"></i> Trained</span>
-                  <span><i class="bi bi-check2-circle"></i> Compassionate</span>
-                  <span><i class="bi bi-check2-circle"></i> Reliable</span>
-                </div>
-
-                <div class="sidebar-price-row">
-                  <div class="sidebar-price">Flexible Cover</div>
-                  <a href="{{ route('contact') }}" class="sidebar-btn">Enquire</a>
-                </div>
-              </div>
-            </div>
-          @endforelse
-
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- Featured Healthcare Workers Section -->
-{{-- <section id="featured-agents" class="featured-agents section">
-
-  <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
     <h2>Featured Healthcare Workers</h2>
     <p>Experienced, compassionate professionals ready to support your care needs</p>
-  </div><!-- End Section Title -->
-
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-    <div class="row gy-4 justify-content-center">
-
-      <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
-        <div class="featured-agent">
-          <div class="agent-wrapper">
-            <div class="agent-photo">
-              <img src="{{ asset('fe/assets/img/healthcare/agent-2.webp') }}" alt="Healthcare Worker" class="img-fluid">
-              <span class="achievement-badge">Senior</span>
-            </div>
-            <div class="agent-details">
-              <h4>Amelia Johnson</h4>
-              <span class="position">Registered Nurse</span>
-              <div class="location-info">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span>Hospital & Clinical Care</span>
-              </div>
-              <div class="expertise-tags">
-                <span class="tag">Acute Care</span>
-                <span class="tag">Patient Safety</span>
-              </div>
-              <a href="contact.html" class="view-profile">Hire Them</a>
-            </div>
-          </div>
-        </div>
-      </div><!-- End Healthcare Worker -->
-
-      <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-        <div class="featured-agent">
-          <div class="agent-wrapper">
-            <div class="agent-photo">
-              <img src="{{ asset('fe/assets/img/healthcare/agent-3.webp') }}" alt="Healthcare Worker" class="img-fluid">
-              <span class="achievement-badge expert">Expert</span>
-            </div>
-            <div class="agent-details">
-              <h4>Daniel Brooks</h4>
-              <span class="position">Support Worker</span>
-              <div class="location-info">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span>Residential & Home Care</span>
-              </div>
-              <div class="expertise-tags">
-                <span class="tag">Personal Care</span>
-                <span class="tag">Mobility Support</span>
-              </div>
-              <a href="contact.html" class="view-profile">Hire Them</a>
-            </div>
-          </div>
-        </div>
-      </div><!-- End Healthcare Worker -->
-
-      <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="300">
-        <div class="featured-agent">
-          <div class="agent-wrapper">
-            <div class="agent-photo">
-              <img src="{{ asset('fe/assets/img/healthcare/agent-4.webp') }}" alt="Healthcare Worker" class="img-fluid">
-              <span class="achievement-badge rising">Trusted</span>
-            </div>
-            <div class="agent-details">
-              <h4>Sophia Clarke</h4>
-              <span class="position">Healthcare Assistant</span>
-              <div class="location-info">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span>Care Homes</span>
-              </div>
-              <div class="expertise-tags">
-                <span class="tag">Elderly Care</span>
-                <span class="tag">Companionship</span>
-              </div>
-              <a href="contact.html" class="view-profile">Hire Them</a>
-            </div>
-          </div>
-        </div>
-      </div><!-- End Healthcare Worker -->
-
-      <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="400">
-        <div class="featured-agent">
-          <div class="agent-wrapper">
-            <div class="agent-photo">
-              <img src="{{ asset('fe/assets/img/healthcare/agent-5.webp') }}" alt="Healthcare Worker" class="img-fluid">
-              <span class="achievement-badge veteran">Veteran</span>
-            </div>
-            <div class="agent-details">
-              <h4>Michael Turner</h4>
-              <span class="position">Doctor</span>
-              <div class="location-info">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span>Clinical & Emergency Care</span>
-              </div>
-              <div class="expertise-tags">
-                <span class="tag">Diagnosis</span>
-                <span class="tag">Treatment Planning</span>
-              </div>
-              <a href="contact.html" class="view-profile">Hire Them</a>
-            </div>
-          </div>
-        </div>
-      </div><!-- End Healthcare Worker -->
-
-    </div>
-
   </div>
 
-</section><!-- /Featured Healthcare Workers Section --> --}}
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4 justify-content-center">
 
+      @foreach($featuredStaff as $index => $staff)
+        <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="{{ ($index + 1) * 100 }}">
+          <div class="featured-agent">
+            <div class="agent-wrapper">
+              <div class="agent-photo">
+                <img src="{{ $staff->photo ? asset('storage/'.$staff->photo) : asset('fe/assets/img/healthcare/default.webp') }}"
+                     alt="{{ $staff->full_name }}"
+                     class="img-fluid">
 
+                @if($staff->years_of_experience >= 10)
+                    <span class="achievement-badge veteran">Veteran</span>
+                @elseif($staff->years_of_experience >= 5)
+                    <span class="achievement-badge expert">Expert</span>
+                @else
+                    <span class="achievement-badge rising">Rising</span>
+                @endif
+              </div>
+
+              <div class="agent-details">
+                <h4>{{ $staff->full_name }}</h4>
+                <span class="position">{{ $staff->role }}</span>
+
+                <div class="location-info">
+                  <i class="bi bi-briefcase-fill"></i>
+                  <span>{{ $staff->care_specialty ?? 'Healthcare Professional' }}</span>
+                </div>
+
+                @if(!empty($staff->skills))
+                <div class="expertise-tags">
+                    @foreach(array_slice($staff->skills, 0, 2) as $skill)
+                        <span class="tag">{{ $skill }}</span>
+                    @endforeach
+                </div>
+                @endif
+
+                <a href="{{ route('staff.apply', $staff->id) }}" class="view-profile">
+                    Hire Them
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      @endforeach
+
+    </div>
+  </div>
+
+</section>
+@endif
+
+@if ($featuredOffers->count() > 0)
+  
 <section id="job-postings" class="job-postings section light-background">
 
   <div class="container section-title" data-aos="fade-up">
@@ -739,7 +650,7 @@ Tobest Health care
   <div class="container">
     <div class="row gy-4">
 
-      @forelse($featuredOffers as $offer)
+      @foreach($featuredOffers as $offer)
         <div class="col-lg-6" data-aos="fade-up">
           <div class="job-card">
 
@@ -777,58 +688,12 @@ Tobest Health care
 
           </div>
         </div>
-      @empty
-
-        {{-- FALLBACK CARD 1 --}}
-        <div class="col-lg-6">
-          <div class="job-card">
-            <div class="job-header">
-              <span class="job-badge onsite">On-site</span>
-              <span class="job-salary">£28 – £38 / hour</span>
-            </div>
-
-            <h3 class="job-title">Registered Nurse</h3>
-            <p class="job-role">Hospital & Clinical Settings</p>
-
-            <p class="job-description">
-              Experienced nurses delivering safe, compassionate, high-quality care
-              across hospital environments.
-            </p>
-
-            <a href="{{ route('contact') }}" class="job-cta">
-              Enquire
-            </a>
-          </div>
-        </div>
-
-        {{-- FALLBACK CARD 2 --}}
-        <div class="col-lg-6">
-          <div class="job-card">
-            <div class="job-header">
-              <span class="job-badge hybrid">Hybrid</span>
-              <span class="job-salary">£12 – £16 / hour</span>
-            </div>
-
-            <h3 class="job-title">Support Worker</h3>
-            <p class="job-role">Residential & Community Care</p>
-
-            <p class="job-description">
-              Compassionate professionals supporting daily living and independence.
-            </p>
-
-            <a href="{{ route('contact') }}" class="job-cta">
-              Enquire
-            </a>
-          </div>
-        </div>
-
-      @endforelse
+      @endforeach
 
     </div>
   </div>
-
 </section>
-
+@endif
 
 <!-- Why Us Section -->
 <section id="why-us" class="why-us section">
@@ -1068,16 +933,35 @@ Tobest Health care
       </div>
 
       <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-        <h4>Contact Us</h4>
-        <p>ToBest Health Care Solutions</p>
-        <p>United Kingdom</p>
-        <p class="mt-4">
-          <strong>Phone:</strong> <span>03301331162</span>
-        </p>
-        <p>
-          <strong>Email:</strong> <span>info@tobesthealthcaresolutions.com</span>
-        </p>
-      </div>
+  <h4>Contact Us</h4>
+
+  <p><strong>ToBest Health Care Solutions</strong></p>
+
+  <p>
+    <strong>UK HQ:</strong><br>
+    45–47 Norman Street,<br>
+    Huddersfield,<br>
+    HD2 2UE,<br>
+    United Kingdom
+  </p>
+
+  <p class="mt-3">
+    <strong>Nigeria (Aba Branch):</strong><br>
+    Aba, Abia State,<br>
+    Nigeria
+  </p>
+
+  <p class="mt-4">
+    <strong>Phone:</strong><br>
+    <span>0330 133 1162</span>
+  </p>
+
+  <p>
+    <strong>Email:</strong><br>
+    <span>info@tobesthealthcaresolutions.co.uk</span>
+  </p>
+</div>
+
 
     </div>
   </div>
@@ -1099,6 +983,55 @@ Tobest Health care
 
   <!-- Preloader -->
   <div id="preloader"></div>
+<script>
+/* 🛡️ Final Samsung Browser safety net */
+document.documentElement.style.setProperty('color-scheme', 'light');
+document.documentElement.style.setProperty('-webkit-color-scheme', 'light');
+</script>
+
+  <script>
+$(document).ready(function() {
+    $('.select2').select2({
+        placeholder: "Any",
+        allowClear: true,
+        width: 'resolve'
+    });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const locations = @json($locations); // Laravel array of locations
+    const input = document.getElementById('location-input');
+    const suggestionBox = document.getElementById('location-suggestions');
+
+    input.addEventListener('input', function() {
+        const value = this.value.toLowerCase();
+        suggestionBox.innerHTML = '';
+        if (!value) return;
+
+        const filtered = locations.filter(city => city.toLowerCase().includes(value));
+        filtered.forEach(city => {
+            const div = document.createElement('div');
+            div.classList.add('autocomplete-suggestion');
+            div.textContent = city;
+            div.addEventListener('click', function() {
+                input.value = city;
+                suggestionBox.innerHTML = '';
+            });
+            suggestionBox.appendChild(div);
+        });
+    });
+
+    // Close suggestions if clicked outside
+    document.addEventListener('click', function(e) {
+        if (e.target !== input) {
+            suggestionBox.innerHTML = '';
+        }
+    });
+});
+</script>
+
 
   <!-- Vendor JS Files -->
   <script src="{{ asset('fe/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>

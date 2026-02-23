@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('content')
-
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -9,88 +8,92 @@
         <h1 class="h3 text-gray-800">Staff Members</h1>
 
         <a href="{{ route('admin.staff.create') }}" class="btn btn-primary">
-            + Add New Staff
+            <i class="bi bi-plus-circle"></i> Add New Staff
         </a>
     </div>
 
     {{-- Success Message --}}
     @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
-    <div class="card shadow mb-4">
-        <div class="card-body">
+    {{-- Filter Tabs --}}
+    <ul class="nav nav-tabs mb-4" id="staffTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab">
+                All Staff <span class="badge bg-secondary ms-1">{{ $staff->total() }}</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="nurses-tab" data-bs-toggle="tab" data-bs-target="#nurses" type="button" role="tab">
+                <i class="bi bi-heart-pulse"></i> Nurses
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="hca-tab" data-bs-toggle="tab" data-bs-target="#hca" type="button" role="tab">
+                <i class="bi bi-person-plus"></i> Healthcare Assistants
+            </button>
+        </li>
+    </ul>
 
-            @if ($staff->count() === 0)
-                <p class="text-muted mb-0">No staff members found.</p>
-            @else
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Available</th>
-                                <th>Active</th>
-                                <th>Skills</th>
-                                <th width="160">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($staff as $member)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $member->full_name }}</td>
-                                    <td>{{ $member->email }}</td>
-                                    <td>{{ $member->role }}</td>
-                                    <td>
-                                        @if ($member->is_available)
-                                            <span class="badge badge-success">Yes</span>
-                                        @else
-                                            <span class="badge badge-secondary">No</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($member->is_active)
-                                            <span class="badge badge-success">Active</span>
-                                        @else
-                                            <span class="badge badge-secondary">Inactive</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($member->skills)
-                                            <ul class="mb-0">
-                                                @foreach ($member->skills as $skill)
-                                                    <li>{{ $skill }}</li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('admin.staff.edit', $member->id) }}" class="btn btn-sm btn-warning">Edit</a>
-
-                                        <form action="{{ route('admin.staff.destroy', $member->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this staff member?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                    {{ $staff->links() }}
-                </div>
-            @endif
-
+    <div class="tab-content" id="staffTabsContent">
+        {{-- All Staff Tab --}}
+        <div class="tab-pane fade show active" id="all" role="tabpanel">
+            @include('admin.staff.partials.staff-table', [
+                'staff' => $staff, 
+                'showAll' => true,
+                'showPagination' => true
+            ])
+        </div>
+        
+        {{-- Nurses Tab --}}
+        <div class="tab-pane fade" id="nurses" role="tabpanel">
+            @include('admin.staff.partials.staff-table', [
+                'staff' => $staff->where('role', 'Nurse'), 
+                'showAll' => false,
+                'type' => 'nurse',
+                'showPagination' => false
+            ])
+        </div>
+        
+        {{-- HCA Tab --}}
+        <div class="tab-pane fade" id="hca" role="tabpanel">
+            @include('admin.staff.partials.staff-table', [
+                'staff' => $staff->where('role', 'Healthcare Assistant'), 
+                'showAll' => false,
+                'type' => 'hca',
+                'showPagination' => false
+            ])
         </div>
     </div>
 
 </div>
-
 @stop
+
+@push('styles')
+<style>
+    .nav-tabs .nav-link {
+        color: #4e73df;
+        font-weight: 500;
+        border: none;
+        padding: 0.75rem 1.5rem;
+    }
+    .nav-tabs .nav-link.active {
+        color: #224abe;
+        border-bottom: 3px solid #4e73df;
+        background: transparent;
+    }
+    .nav-tabs .nav-link i {
+        margin-right: 0.5rem;
+    }
+    .badge.bg-secondary {
+        background-color: #858796 !important;
+    }
+    .hover-tooltip {
+        cursor: help;
+    }
+</style>
+@endpush

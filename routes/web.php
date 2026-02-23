@@ -12,6 +12,23 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\IndexController;
 
+
+use App\Http\Controllers\RegisterController;
+
+Route::prefix('register')->group(function () {
+
+    Route::get('/nurse', [RegisterController::class, 'showNurseForm'])
+        ->name('register.nurse');
+
+        Route::get('/hca', [RegisterController::class, 'showHcaForm'])
+        ->name('register.hca');
+
+    Route::post('/nurse', [RegisterController::class, 'storeNewRegister'])
+        ->name('register.nurse.save');
+
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -120,6 +137,11 @@ Route::get('/staff/{staff}/apply', [ApplicationController::class, 'createStaff']
 Route::post('/staff/{staff}/apply', [ApplicationController::class, 'storeStaff'])
     ->name('staff.apply.store');
 
+Route::patch('/admin/staff/{staff}/toggle-status', [App\Http\Controllers\AdmiStaffController::class, 'toggleStatus'])
+->name('admin.staff.toggle-status');
+
+// Route::get('/admin/staff/{staff}', [App\Http\Controllers\AdminStaffController::class, 'show'])
+// ->name('admin.staff.show');
 
 Route::get('staff', [AdminStaffController::class, 'index'])
     ->middleware('auth')

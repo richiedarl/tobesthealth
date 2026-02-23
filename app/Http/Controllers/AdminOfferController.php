@@ -22,11 +22,11 @@ class AdminOfferController extends Controller
 
     public function create()
     {
-        
         return view('admin.jobs.create', [
             'roles' => Role::orderBy('name')->get(),
             'serviceTypes' => ServiceType::orderBy('name')->get(),
             'careSettings' => CareSetting::orderBy('name')->get(),
+            'locations' => config('uk_cities.cities'), // <-- Add this
         ]);
     }
 
